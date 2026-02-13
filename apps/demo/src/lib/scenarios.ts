@@ -6,6 +6,7 @@ export interface DemoMessage {
   text: string;
   products?: DemoProduct[];
   checkout?: Record<string, unknown>;
+  choices?: Array<{ label: string; value: string }>;
   typing?: boolean;
 }
 
@@ -45,40 +46,35 @@ export interface StepResult {
 export interface ScenarioContext {
   checkoutId?: string;
   selectedProduct?: DemoProduct;
+  filterQuery?: string;
 }
 
-let stepCounter = 0;
-function nextId(): string {
-  return `msg_${++stepCounter}_${Date.now()}`;
-}
+export const STYLE_FILTERS = [
+  { label: 'White Tees', value: 'white' },
+  { label: 'Black Tees', value: 'black' },
+  { label: 'Oversized', value: 'oversized' },
+  { label: 'Graphic Tees', value: 'graphic' },
+  { label: 'Browse All', value: '' },
+];
 
 function eventId(): string {
   return `evt_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 }
 
-export function createDemoScenario(): ScenarioStep[] {
-  return [
-    // Step 1: Search for products
-    {
-      userMessage: 'Find me a white t-shirt under $50',
-      aiMessage: "I'll search for white t-shirts in your price range. Here's what I found:",
-      action: async () => {
-        const data = await api.getProducts('white');
-        const products: DemoProduct[] = (data.products || []).filter(
-          (p: DemoProduct) => p.price <= 5000
-        );
-        return { products: products.length > 0 ? products : data.products?.slice(0, 3) };
-      },
-      journeyEvents: [
-        { type: 'PRODUCT_SEARCH', stage: 1, message: 'Agent searching catalog: "white t-shirt under $50"' },
-        { type: 'PRODUCT_RESULTS', stage: 2, message: 'Catalog returned matching products to agent' },
-      ],
-    },
+/** Search products by filter query. Returns up to 6 results under $50. */
+export async function searchProducts(query: string): Promise<DemoProduct[]> {
+  const data = await api.getProducts(query || undefined);
+  const all: DemoProduct[] = data.products || [];
+  const affordable = all.filter((p: DemoProduct) => p.price <= 5000);
+  const results = affordable.length > 0 ? affordable : all;
+  return results.slice(0, 6);
+}
 
-    // Step 2: Select product and create checkout
+/** Checkout steps that auto-advance after product selection. */
+export function createCheckoutSteps(): ScenarioStep[] {
+  return [
     {
-      userMessage: "I'll take the first one. Add it to checkout.",
-      aiMessage: "Great choice! I'm creating a checkout for you now...",
+      aiMessage: "Great choice! Creating a checkout for you now...",
       action: async (ctx) => {
         if (!ctx.selectedProduct) return {};
         const checkout = await api.createCheckout([
@@ -92,11 +88,8 @@ export function createDemoScenario(): ScenarioStep[] {
         { type: 'INVENTORY_CHECK', stage: 3, message: 'Inventory reserved for agent purchase' },
       ],
     },
-
-    // Step 3: Add shipping address
     {
-      userMessage: 'Ship it to 123 Tech Blvd, San Francisco, CA 94107',
-      aiMessage: "I've added your shipping address. Let me get the shipping options and calculate totals...",
+      aiMessage: "Adding shipping address and calculating totals...",
       action: async (ctx) => {
         if (!ctx.checkoutId) return {};
         const checkout = await api.updateCheckout(ctx.checkoutId, {
@@ -121,11 +114,8 @@ export function createDemoScenario(): ScenarioStep[] {
         { type: 'TAX_SHIPPING_CALC', stage: 4, message: 'Tax and shipping calculated by ISV' },
       ],
     },
-
-    // Step 4: Confirm and pay
     {
-      userMessage: 'Looks good — go ahead and place the order!',
-      aiMessage: "Processing your payment now...",
+      aiMessage: "Processing payment...",
       action: async (ctx) => {
         if (!ctx.checkoutId) return {};
         const checkout = await api.completeCheckout(

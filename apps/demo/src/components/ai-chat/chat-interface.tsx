@@ -1,19 +1,25 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { ArrowRight, RotateCcw, CheckCircle } from 'lucide-react';
+import { RotateCcw, CheckCircle, Loader2 } from 'lucide-react';
 import { MessageBubble } from './message-bubble';
 import { ProductCard } from './product-card';
 import {
-  createDemoScenario,
+  STYLE_FILTERS,
+  searchProducts,
+  createCheckoutSteps,
   createJourneyEvent,
   type DemoMessage,
   type DemoProduct,
   type ScenarioContext,
   type JourneyEvent,
 } from '@/lib/scenarios';
-import { cn } from '@/lib/utils';
-import { sleep } from '@/lib/utils';
+
+function sleep(ms: number) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+type Phase = 'filter' | 'browsing' | 'running' | 'complete';
 
 interface ChatInterfaceProps {
   onJourneyEvent: (event: JourneyEvent) => void;
@@ -27,125 +33,201 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
     {
       id: 'welcome',
       sender: 'ai',
-      text: "Hi! I'm an AI shopping assistant connected through the Agentic Commerce Protocol. Click \"Next Step\" to walk through a purchase.",
+      text: "Welcome to Agentix! We're connected to a Shopify store with 100 real t-shirts via the Agentic Commerce Protocol.\n\nPick a style to browse:",
+      choices: STYLE_FILTERS,
     },
   ]);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [phase, setPhase] = useState<Phase>('filter');
   const [selectedProduct, setSelectedProduct] = useState<DemoProduct | null>(null);
-  const [isComplete, setIsComplete] = useState(false);
   const [orderCount, setOrderCount] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
 
   const ctxRef = useRef<ScenarioContext>({});
-  const scenario = useRef(createDemoScenario());
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSelectProduct = useCallback((product: DemoProduct) => {
-    setSelectedProduct(product);
-    ctxRef.current.selectedProduct = product;
-  }, []);
+  /** User clicked a style filter button */
+  const handleFilterSelect = useCallback(async (value: string) => {
+    if (phase !== 'filter') return;
+    setPhase('running');
 
-  const advanceStep = useCallback(async () => {
-    const step = scenario.current[currentStep];
-    if (!step || isProcessing) return;
+    const filterObj = STYLE_FILTERS.find((f) => f.value === value);
+    const label = filterObj?.label ?? 'Browse All';
 
-    setIsProcessing(true);
+    // Disable the filter buttons by removing choices from welcome message
+    setMessages((prev) =>
+      prev.map((m) => (m.id === 'welcome' ? { ...m, choices: undefined } : m))
+    );
 
-    // 1. Show user message
-    if (step.userMessage) {
-      setMessages((prev) => [
-        ...prev,
-        { id: `user_${currentStep}`, sender: 'user', text: step.userMessage! },
-      ]);
-      await sleep(400);
-    }
-
-    // 2. Show typing indicator
+    // Show user message
     setMessages((prev) => [
       ...prev,
-      { id: `typing_${currentStep}`, sender: 'ai', text: '', typing: true },
+      { id: 'user_filter', sender: 'user', text: `Show me ${label}` },
+    ]);
+    await sleep(300);
+
+    // Show typing
+    setMessages((prev) => [
+      ...prev,
+      { id: 'typing_search', sender: 'ai', text: '', typing: true },
     ]);
 
-    // 3. Fire journey events with stagger
-    for (const evt of step.journeyEvents) {
-      await sleep(300);
-      onJourneyEvent(createJourneyEvent(evt.type, evt.stage, evt.message));
-    }
+    // Fire search journey events
+    onJourneyEvent(createJourneyEvent('PRODUCT_SEARCH', 1, `Agent searching catalog: "${value || 'all t-shirts'}"`));
+    await sleep(400);
+    onJourneyEvent(createJourneyEvent('PRODUCT_RESULTS', 2, 'Catalog returned matching products to agent'));
 
-    // 4. Execute the action (real API call)
-    let result: { products?: DemoProduct[]; checkout?: Record<string, unknown> } = {};
+    // Search
+    let products: DemoProduct[] = [];
     try {
-      result = await step.action(ctxRef.current);
+      products = await searchProducts(value);
     } catch (err) {
-      console.error('Scenario step failed:', err);
+      console.error('Search failed:', err);
     }
 
-    await sleep(600);
+    await sleep(400);
 
-    // 5. Remove typing indicator and show AI response
+    // Remove typing, show results
+    const resultText = products.length > 0
+      ? `Here are ${products.length} ${label.toLowerCase()} under $50. Click one to purchase!`
+      : `No products found for "${label}". Try another style!`;
+
     setMessages((prev) => {
-      const filtered = prev.filter((m) => m.id !== `typing_${currentStep}`);
-      const aiMsg: DemoMessage = {
-        id: `ai_${currentStep}`,
-        sender: 'ai',
-        text: step.aiMessage,
-        products: result.products,
-        checkout: result.checkout,
-      };
-      return [...filtered, aiMsg];
+      const filtered = prev.filter((m) => m.id !== 'typing_search');
+      return [
+        ...filtered,
+        {
+          id: 'ai_results',
+          sender: 'ai',
+          text: resultText,
+          products,
+        },
+      ];
     });
 
-    // Auto-select first product if this step returned products and none selected
-    if (result.products && result.products.length > 0 && !selectedProduct) {
-      const first = result.products[0]!;
-      setSelectedProduct(first);
-      ctxRef.current.selectedProduct = first;
+    setPhase(products.length > 0 ? 'browsing' : 'filter');
+
+    // If no products, re-show filter buttons
+    if (products.length === 0) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: 'retry_filter',
+          sender: 'ai',
+          text: 'Pick another style:',
+          choices: STYLE_FILTERS,
+        },
+      ]);
+    }
+  }, [phase, onJourneyEvent]);
+
+  /** User clicked a product card */
+  const handleSelectProduct = useCallback(async (product: DemoProduct) => {
+    if (phase !== 'browsing') return;
+    setPhase('running');
+    setSelectedProduct(product);
+    ctxRef.current.selectedProduct = product;
+
+    // Show user message
+    setMessages((prev) => [
+      ...prev,
+      { id: 'user_select', sender: 'user', text: `I'll take the ${product.title}` },
+    ]);
+    await sleep(400);
+
+    // Auto-advance through checkout steps
+    const steps = createCheckoutSteps();
+    for (let i = 0; i < steps.length; i++) {
+      const step = steps[i]!;
+
+      // Show typing
+      setMessages((prev) => [
+        ...prev,
+        { id: `typing_step_${i}`, sender: 'ai', text: '', typing: true },
+      ]);
+
+      // Fire journey events
+      for (const evt of step.journeyEvents) {
+        await sleep(300);
+        onJourneyEvent(createJourneyEvent(evt.type, evt.stage, evt.message));
+      }
+
+      // Execute action
+      let result: { products?: DemoProduct[]; checkout?: Record<string, unknown> } = {};
+      try {
+        result = await step.action(ctxRef.current);
+      } catch (err) {
+        console.error(`Checkout step ${i} failed:`, err);
+      }
+
+      await sleep(600);
+
+      // Remove typing, show AI message
+      setMessages((prev) => {
+        const filtered = prev.filter((m) => m.id !== `typing_step_${i}`);
+        const aiMsg: DemoMessage = {
+          id: `ai_step_${i}`,
+          sender: 'ai',
+          text: step.aiMessage,
+          checkout: result.checkout,
+        };
+        return [...filtered, aiMsg];
+      });
+
+      // Check if order completed
+      if (result.checkout && (result.checkout as Record<string, unknown>).status === 'completed') {
+        const totals = (result.checkout as Record<string, unknown>).totals as Array<{ type: string; amount: number }> | undefined;
+        const total = totals?.find((t) => t.type === 'total')?.amount ?? 0;
+        const newOrderCount = orderCount + 1;
+        const newRevenue = totalRevenue + total;
+        setOrderCount(newOrderCount);
+        setTotalRevenue(newRevenue);
+        onOrderComplete(result.checkout);
+        onStatsUpdate({ orders: newOrderCount, revenue: newRevenue });
+      }
+
+      await sleep(300);
     }
 
-    // If order completed, update stats
-    if (result.checkout && (result.checkout as Record<string, unknown>).status === 'completed') {
-      const totals = (result.checkout as Record<string, unknown>).totals as Array<{ type: string; amount: number }> | undefined;
-      const total = totals?.find((t) => t.type === 'total')?.amount ?? 0;
-      const newOrderCount = orderCount + 1;
-      const newRevenue = totalRevenue + total;
-      setOrderCount(newOrderCount);
-      setTotalRevenue(newRevenue);
-      onOrderComplete(result.checkout);
-      onStatsUpdate({ orders: newOrderCount, revenue: newRevenue });
-      setIsComplete(true);
-    }
+    // Show completion message
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: 'ai_complete',
+        sender: 'ai',
+        text: "Order confirmed! Your t-shirt is on its way. That's the full ACP flow — from product discovery to payment — all through a single protocol.",
+      },
+    ]);
 
-    const nextStep = currentStep + 1;
-    setCurrentStep(nextStep);
-    setIsProcessing(false);
-
-    if (nextStep >= scenario.current.length) {
-      setIsComplete(true);
-    }
-  }, [currentStep, isProcessing, onJourneyEvent, onOrderComplete, onStatsUpdate, selectedProduct, orderCount, totalRevenue]);
+    setPhase('complete');
+  }, [phase, onJourneyEvent, onOrderComplete, onStatsUpdate, orderCount, totalRevenue]);
 
   const handleReset = useCallback(() => {
     setMessages([
       {
         id: 'welcome',
         sender: 'ai',
-        text: "Hi! I'm an AI shopping assistant connected through the Agentic Commerce Protocol. Click \"Next Step\" to walk through a purchase.",
+        text: "Welcome to Agentix! We're connected to a Shopify store with 100 real t-shirts via the Agentic Commerce Protocol.\n\nPick a style to browse:",
+        choices: STYLE_FILTERS,
       },
     ]);
-    setCurrentStep(0);
-    setIsComplete(false);
+    setPhase('filter');
     setSelectedProduct(null);
     ctxRef.current = {};
-    scenario.current = createDemoScenario();
     onReset();
   }, [onReset]);
 
-  const nextStepLabel = scenario.current[currentStep]?.userMessage ?? 'Next Step';
+  const phaseLabel = () => {
+    switch (phase) {
+      case 'filter': return 'Choose a style above';
+      case 'browsing': return 'Click a product to purchase';
+      case 'running': return 'Processing...';
+      case 'complete': return 'Demo complete';
+    }
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -160,7 +242,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
           <span className="font-mono text-xs text-accent-200">AI Agent — Agentic Commerce Protocol</span>
         </div>
         <span className="text-xs bg-accent-700/50 text-accent-200 font-mono px-2 py-0.5 rounded-full">
-          Step {Math.min(currentStep + 1, scenario.current.length)}/{scenario.current.length}
+          {phaseLabel()}
         </span>
       </div>
 
@@ -169,6 +251,22 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
         {messages.map((msg) => (
           <div key={msg.id}>
             <MessageBubble sender={msg.sender} text={msg.text} typing={msg.typing}>
+              {/* Filter choice buttons */}
+              {msg.choices && msg.choices.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {msg.choices.map((c) => (
+                    <button
+                      key={c.value}
+                      onClick={() => handleFilterSelect(c.value)}
+                      className="px-3 py-1.5 bg-accent-100 text-accent-700 rounded-full text-sm font-medium hover:bg-accent-200 hover:text-accent-800 transition-colors border border-accent-200"
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Product cards */}
               {msg.products && msg.products.length > 0 && (
                 <div className="grid grid-cols-2 gap-2 mt-2">
                   {msg.products.map((p) => (
@@ -176,11 +274,13 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
                       key={p.id}
                       product={p}
                       selected={selectedProduct?.id === p.id}
-                      onSelect={handleSelectProduct}
+                      onSelect={phase === 'browsing' ? handleSelectProduct : undefined}
                     />
                   ))}
                 </div>
               )}
+
+              {/* Order confirmed badge */}
               {msg.checkout && (msg.checkout as Record<string, unknown>).status === 'completed' && (
                 <div className="mt-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2 text-emerald-700 text-sm">
                   <CheckCircle className="w-4 h-4" />
@@ -196,30 +296,12 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
       {/* Action Bar */}
       <div className="px-4 py-3 border-t border-warm-200 bg-warm-50">
         <div className="flex items-center gap-2">
-          {!isComplete ? (
-            <button
-              onClick={advanceStep}
-              disabled={isProcessing}
-              className={cn(
-                'flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-full font-medium text-sm transition-all',
-                isProcessing
-                  ? 'bg-accent-100 text-accent-400 cursor-not-allowed'
-                  : 'bg-accent-600 text-white hover:bg-accent-700 shadow-sm shadow-accent-600/25'
-              )}
-            >
-              {isProcessing ? (
-                <>
-                  <div className="w-3.5 h-3.5 border-2 border-accent-300 border-t-transparent rounded-full animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <span className="truncate max-w-[200px]">&quot;{nextStepLabel}&quot;</span>
-                  <ArrowRight className="w-3.5 h-3.5 shrink-0" />
-                </>
-              )}
-            </button>
-          ) : (
+          {phase === 'running' ? (
+            <div className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-accent-100 text-accent-500 rounded-full text-sm font-medium">
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              Processing...
+            </div>
+          ) : phase === 'complete' ? (
             <button
               onClick={handleReset}
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-accent-100 text-accent-700 rounded-full font-medium text-sm hover:bg-accent-200 transition-all"
@@ -227,6 +309,10 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
               <RotateCcw className="w-3.5 h-3.5" />
               Run Demo Again
             </button>
+          ) : (
+            <div className="flex-1 text-center text-sm text-brand-400 py-2.5">
+              {phase === 'filter' ? 'Choose a style above to get started' : 'Click a product above to purchase it'}
+            </div>
           )}
         </div>
       </div>
