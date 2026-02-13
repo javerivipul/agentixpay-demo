@@ -1,0 +1,419 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// TENANT (ISV Customer)
+// ============================================
+
+model Tenant {
+  id                  String       @id @default(cuid())
+  name                String
+  email               String       @unique
+  companyName         String?
+
+  // API Authentication
+  apiKey              String       @unique
+  apiSecretHash       String
+
+  // Platform connection
+  platform            Platform
+  platformConfig      Json         @default("{}")
+  platformConnectedAt DateTime?
+
+  // Settings
+  settings            Json         @default("{\"protocols\":[\"acp\"],\"aeoEnabled\":false,\"rateLimit\":100}")
+
+  // Status
+  status              TenantStatus @default(ONBOARDING)
+
+  // Relations
+  products            Product[]
+  checkouts           Checkout[]
+  orders              Order[]
+  apiLogs             ApiLog[]
+  syncJobs            SyncJob[]
+
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  @@index([apiKey])
+  @@index([status])
+}
+
+enum Platform {
+  SHOPIFY
+  WOOCOMMERCE
+  VENDURE
+  CUSTOM
+}
+
+enum TenantStatus {
+  ONBOARDING
+  CONNECTING
+  SYNCING
+  ACTIVE
+  SUSPENDED
+  DISCONNECTED
+}
+
+// ============================================
+// PRODUCT
+// ============================================
+
+model Product {
+  id                String          @id @default(cuid())
+  tenantId          String
+  tenant            Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  externalId        String
+  externalUrl       String?
+
+  sku               String
+  title             String
+  description       String?
+  descriptionHtml   String?
+
+  price             Decimal         @db.Decimal(10, 2)
+  compareAtPrice    Decimal?        @db.Decimal(10, 2)
+  currency          String          @default("USD")
+
+  images            Json            @default("[]")
+
+  inventoryQuantity Int             @default(0)
+  inventoryPolicy   InventoryPolicy @default(DENY)
+  trackInventory    Boolean         @default(true)
+
+  productType       String?
+  vendor            String?
+  tags              String[]
+
+  hasVariants       Boolean         @default(false)
+  variants          Json?
+
+  aeoEnhanced       Boolean         @default(false)
+  aeoData           Json?
+
+  metadata          Json?
+
+  status            ProductStatus   @default(ACTIVE)
+
+  lastSyncedAt      DateTime
+  syncChecksum      String?
+
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  checkoutItems     CheckoutItem[]
+  orderItems        OrderItem[]
+
+  @@unique([tenantId, externalId])
+  @@unique([tenantId, sku])
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@index([sku])
+}
+
+enum InventoryPolicy {
+  DENY
+  CONTINUE
+}
+
+enum ProductStatus {
+  ACTIVE
+  DRAFT
+  ARCHIVED
+  DELETED
+}
+
+// ============================================
+// CHECKOUT
+// ============================================
+
+model Checkout {
+  id                String          @id @default(cuid())
+  tenantId          String
+  tenant            Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  protocol          Protocol
+
+  externalId        String?
+
+  status            CheckoutStatus  @default(CREATED)
+
+  items             CheckoutItem[]
+
+  email             String?
+
+  shippingAddress   Json?
+  shippingMethod    String?
+  shippingCost      Decimal?        @db.Decimal(10, 2)
+
+  billingAddress    Json?
+
+  subtotal          Decimal         @db.Decimal(10, 2) @default(0)
+  taxAmount         Decimal         @db.Decimal(10, 2) @default(0)
+  totalAmount       Decimal         @db.Decimal(10, 2) @default(0)
+  currency          String          @default("USD")
+
+  paymentToken      String?
+  paymentStatus     PaymentStatus?
+  paymentMethod     String?
+
+  metadata          Json?
+
+  userAgent         String?
+  ipAddress         String?
+  source            String?
+
+  expiresAt         DateTime
+  completedAt       DateTime?
+  cancelledAt       DateTime?
+
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  order             Order?
+  events            CheckoutEvent[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([expiresAt])
+}
+
+model CheckoutItem {
+  id                String          @id @default(cuid())
+  checkoutId        String
+  checkout          Checkout        @relation(fields: [checkoutId], references: [id], onDelete: Cascade)
+
+  productId         String
+  product           Product         @relation(fields: [productId], references: [id])
+
+  sku               String
+  title             String
+  price             Decimal         @db.Decimal(10, 2)
+  quantity          Int
+
+  variantId         String?
+  variantTitle      String?
+
+  lineTotal         Decimal         @db.Decimal(10, 2)
+
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@index([checkoutId])
+  @@index([productId])
+}
+
+model CheckoutEvent {
+  id                String          @id @default(cuid())
+  checkoutId        String
+  checkout          Checkout        @relation(fields: [checkoutId], references: [id], onDelete: Cascade)
+
+  type              String
+  data              Json?
+
+  createdAt         DateTime        @default(now())
+
+  @@index([checkoutId])
+}
+
+enum Protocol {
+  ACP
+  UCP
+}
+
+enum CheckoutStatus {
+  CREATED
+  ITEMS_ADDED
+  SHIPPING_SET
+  PAYMENT_PENDING
+  COMPLETED
+  CANCELLED
+  EXPIRED
+  FAILED
+}
+
+enum PaymentStatus {
+  PENDING
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+// ============================================
+// ORDER
+// ============================================
+
+model Order {
+  id                String            @id @default(cuid())
+  tenantId          String
+  tenant            Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  checkoutId        String            @unique
+  checkout          Checkout          @relation(fields: [checkoutId], references: [id])
+
+  externalId        String
+  externalUrl       String?
+  orderNumber       String?
+
+  status            OrderStatus       @default(PENDING)
+
+  items             OrderItem[]
+
+  email             String
+
+  shippingAddress   Json
+  shippingMethod    String?
+  shippingCost      Decimal           @db.Decimal(10, 2) @default(0)
+
+  subtotal          Decimal           @db.Decimal(10, 2)
+  taxAmount         Decimal           @db.Decimal(10, 2) @default(0)
+  totalAmount       Decimal           @db.Decimal(10, 2)
+  currency          String            @default("USD")
+
+  paymentMethod     String?
+  paymentReference  String?
+
+  fulfillmentStatus FulfillmentStatus @default(UNFULFILLED)
+  trackingNumber    String?
+  trackingUrl       String?
+
+  source            String
+  protocol          Protocol
+
+  metadata          Json?
+  notes             String?
+
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@index([externalId])
+}
+
+model OrderItem {
+  id                String          @id @default(cuid())
+  orderId           String
+  order             Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId         String
+  product           Product         @relation(fields: [productId], references: [id])
+
+  sku               String
+  title             String
+  price             Decimal         @db.Decimal(10, 2)
+  quantity          Int
+
+  variantId         String?
+  variantTitle      String?
+
+  lineTotal         Decimal         @db.Decimal(10, 2)
+
+  createdAt         DateTime        @default(now())
+
+  @@index([orderId])
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum FulfillmentStatus {
+  UNFULFILLED
+  PARTIALLY_FULFILLED
+  FULFILLED
+}
+
+// ============================================
+// SYNC & JOBS
+// ============================================
+
+model SyncJob {
+  id                String        @id @default(cuid())
+  tenantId          String
+  tenant            Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  type              SyncType
+  status            SyncJobStatus @default(PENDING)
+
+  totalItems        Int           @default(0)
+  processedItems    Int           @default(0)
+  failedItems       Int           @default(0)
+
+  result            Json?
+  error             String?
+
+  startedAt         DateTime?
+  completedAt       DateTime?
+
+  createdAt         DateTime      @default(now())
+
+  @@index([tenantId])
+  @@index([status])
+}
+
+enum SyncType {
+  FULL
+  INCREMENTAL
+  PRODUCT
+  INVENTORY
+  ORDERS
+}
+
+enum SyncJobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+// ============================================
+// API LOGGING
+// ============================================
+
+model ApiLog {
+  id                String    @id @default(cuid())
+  tenantId          String?
+  tenant            Tenant?   @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+
+  method            String
+  path              String
+  query             Json?
+  body              Json?
+  headers           Json?
+
+  statusCode        Int
+  responseTime      Int
+  responseBody      Json?
+
+  protocol          Protocol?
+  requestId         String
+  ipAddress         String?
+  userAgent         String?
+
+  error             String?
+  errorStack        String?
+
+  createdAt         DateTime  @default(now())
+
+  @@index([tenantId])
+  @@index([createdAt])
+  @@index([path])
+}

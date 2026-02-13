@@ -1,0 +1,25 @@
+{
+  "name": "agentix",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI Commerce Infrastructure - Stripe for AI Commerce",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "clean": "turbo clean",
+    "db:push": "pnpm --filter @agentix/core db:push",
+    "db:migrate": "pnpm --filter @agentix/core db:migrate",
+    "db:seed": "pnpm --filter @agentix/core db:seed",
+    "db:studio": "pnpm --filter @agentix/core db:studio"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@9.15.4",
+  "devDependencies": {
+    "turbo": "^2.8.3"
+  }
+}

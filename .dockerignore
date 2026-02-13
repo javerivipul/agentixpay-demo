@@ -1,0 +1,16 @@
+node_modules
+.next
+dist
+.git
+.gitignore
+.turbo
+.env
+.env.*
+Docs
+Demo_*
+coverage
+*.log
+*.tsbuildinfo
+.DS_Store
+.vscode
+.idea
