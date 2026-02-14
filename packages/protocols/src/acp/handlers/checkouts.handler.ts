@@ -512,13 +512,17 @@ export async function updateCheckout(req: Request, res: Response): Promise<void>
       updateData.shippingMethod = body.fulfillment_option_id;
     }
 
-    // Determine new status
+    // Determine new status — advance through intermediate states
     const hasAddress = body.fulfillment_address || existing.shippingAddress;
     let newStatus = existing.status as CheckoutStatus;
+    if (body.items && canTransition(newStatus, 'ITEMS_ADDED')) {
+      newStatus = 'ITEMS_ADDED';
+    }
+    if (hasAddress && canTransition(newStatus, 'SHIPPING_SET')) {
+      newStatus = 'SHIPPING_SET';
+    }
     if (hasAddress && canTransition(newStatus, 'PAYMENT_PENDING')) {
       newStatus = 'PAYMENT_PENDING';
-    } else if (body.items && canTransition(newStatus, 'ITEMS_ADDED')) {
-      newStatus = 'ITEMS_ADDED';
     }
     updateData.status = newStatus;
 

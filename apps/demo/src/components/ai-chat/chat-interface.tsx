@@ -39,9 +39,9 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
   ]);
   const [phase, setPhase] = useState<Phase>('filter');
   const [selectedProduct, setSelectedProduct] = useState<DemoProduct | null>(null);
-  const [orderCount, setOrderCount] = useState(0);
-  const [totalRevenue, setTotalRevenue] = useState(0);
 
+  // Use refs for stats to avoid stale closures in async callbacks
+  const statsRef = useRef({ orders: 0, revenue: 0 });
   const ctxRef = useRef<ScenarioContext>({});
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -67,7 +67,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
       ...prev,
       { id: 'user_filter', sender: 'user', text: `Show me ${label}` },
     ]);
-    await sleep(300);
+    await sleep(500);
 
     // Show typing
     setMessages((prev) => [
@@ -77,7 +77,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
 
     // Fire search journey events
     onJourneyEvent(createJourneyEvent('PRODUCT_SEARCH', 1, `Agent searching catalog: "${value || 'all t-shirts'}"`));
-    await sleep(400);
+    await sleep(600);
     onJourneyEvent(createJourneyEvent('PRODUCT_RESULTS', 2, 'Catalog returned matching products to agent'));
 
     // Search
@@ -136,7 +136,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
       ...prev,
       { id: 'user_select', sender: 'user', text: `I'll take the ${product.title}` },
     ]);
-    await sleep(400);
+    await sleep(600);
 
     // Auto-advance through checkout steps
     const steps = createCheckoutSteps();
@@ -149,9 +149,9 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
         { id: `typing_step_${i}`, sender: 'ai', text: '', typing: true },
       ]);
 
-      // Fire journey events
+      // Fire journey events with longer delays so investors can watch the right panel
       for (const evt of step.journeyEvents) {
-        await sleep(300);
+        await sleep(500);
         onJourneyEvent(createJourneyEvent(evt.type, evt.stage, evt.message));
       }
 
@@ -163,7 +163,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
         console.error(`Checkout step ${i} failed:`, err);
       }
 
-      await sleep(600);
+      await sleep(800);
 
       // Remove typing, show AI message
       setMessages((prev) => {
@@ -177,19 +177,19 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
         return [...filtered, aiMsg];
       });
 
-      // Check if order completed
+      // Check if order completed — use ref to avoid stale closure
       if (result.checkout && (result.checkout as Record<string, unknown>).status === 'completed') {
         const totals = (result.checkout as Record<string, unknown>).totals as Array<{ type: string; amount: number }> | undefined;
         const total = totals?.find((t) => t.type === 'total')?.amount ?? 0;
-        const newOrderCount = orderCount + 1;
-        const newRevenue = totalRevenue + total;
-        setOrderCount(newOrderCount);
-        setTotalRevenue(newRevenue);
+        statsRef.current = {
+          orders: statsRef.current.orders + 1,
+          revenue: statsRef.current.revenue + total,
+        };
         onOrderComplete(result.checkout);
-        onStatsUpdate({ orders: newOrderCount, revenue: newRevenue });
+        onStatsUpdate({ ...statsRef.current });
       }
 
-      await sleep(300);
+      await sleep(500);
     }
 
     // Show completion message
@@ -203,7 +203,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
     ]);
 
     setPhase('complete');
-  }, [phase, onJourneyEvent, onOrderComplete, onStatsUpdate, orderCount, totalRevenue]);
+  }, [phase, onJourneyEvent, onOrderComplete, onStatsUpdate]);
 
   const handleReset = useCallback(() => {
     setMessages([
@@ -216,6 +216,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
     ]);
     setPhase('filter');
     setSelectedProduct(null);
+    statsRef.current = { orders: 0, revenue: 0 };
     ctxRef.current = {};
     onReset();
   }, [onReset]);
@@ -253,12 +254,12 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
             <MessageBubble sender={msg.sender} text={msg.text} typing={msg.typing}>
               {/* Filter choice buttons */}
               {msg.choices && msg.choices.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-3">
+                <div className="flex flex-wrap justify-center gap-3 mt-3">
                   {msg.choices.map((c) => (
                     <button
                       key={c.value}
                       onClick={() => handleFilterSelect(c.value)}
-                      className="px-3 py-1.5 bg-accent-100 text-accent-700 rounded-full text-sm font-medium hover:bg-accent-200 hover:text-accent-800 transition-colors border border-accent-200"
+                      className="px-4 py-2 bg-accent-100 text-accent-700 rounded-full text-sm font-semibold hover:bg-accent-600 hover:text-white transition-all border border-accent-200 hover:border-accent-600 shadow-sm"
                     >
                       {c.label}
                     </button>
@@ -268,7 +269,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
 
               {/* Product cards */}
               {msg.products && msg.products.length > 0 && (
-                <div className="grid grid-cols-2 gap-2 mt-2">
+                <div className="grid grid-cols-2 gap-2.5 mt-3">
                   {msg.products.map((p) => (
                     <ProductCard
                       key={p.id}
@@ -297,9 +298,9 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
       <div className="px-4 py-3 border-t border-warm-200 bg-warm-50">
         <div className="flex items-center gap-2">
           {phase === 'running' ? (
-            <div className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-accent-100 text-accent-500 rounded-full text-sm font-medium">
+            <div className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-accent-50 text-accent-600 rounded-full text-sm font-medium animate-pulse border border-accent-200">
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              Processing...
+              Processing order...
             </div>
           ) : phase === 'complete' ? (
             <button
@@ -309,11 +310,11 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
               <RotateCcw className="w-3.5 h-3.5" />
               Run Demo Again
             </button>
-          ) : (
+          ) : phase === 'browsing' ? (
             <div className="flex-1 text-center text-sm text-brand-400 py-2.5">
-              {phase === 'filter' ? 'Choose a style above to get started' : 'Click a product above to purchase it'}
+              Click a product above to purchase it
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

@@ -23,12 +23,12 @@ export function ProductCard({ product, selected, onSelect }: ProductCardProps) {
           : 'border-warm-200 hover:border-accent-300'
       )}
     >
-      <div className="h-32 overflow-hidden relative bg-warm-100">
+      <div className="h-32 overflow-hidden relative bg-warm-50 p-2">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imageUrl}
           alt={product.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain"
         />
         {selected && (
           <div className="absolute top-2 right-2 w-6 h-6 bg-accent-500 text-white rounded-full flex items-center justify-center">

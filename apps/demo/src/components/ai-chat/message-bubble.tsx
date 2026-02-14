@@ -26,7 +26,7 @@ export function MessageBubble({ sender, text, typing, children }: MessageBubbleP
       <div className="max-w-[80%] space-y-2">
         <div
           className={cn(
-            'px-4 py-2.5 rounded-2xl text-sm leading-relaxed',
+            'px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-line',
             isUser
               ? 'bg-brand-800 text-white rounded-tr-sm'
               : 'bg-accent-50 text-brand-900 rounded-tl-sm border border-accent-200'

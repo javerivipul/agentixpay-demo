@@ -61,13 +61,14 @@ function eventId(): string {
   return `evt_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 }
 
-/** Search products by filter query. Returns up to 6 results under $50. */
+/** Search products by filter query. Filtered = 6 results, Browse All = 12. */
 export async function searchProducts(query: string): Promise<DemoProduct[]> {
   const data = await api.getProducts(query || undefined);
   const all: DemoProduct[] = data.products || [];
   const affordable = all.filter((p: DemoProduct) => p.price <= 5000);
   const results = affordable.length > 0 ? affordable : all;
-  return results.slice(0, 6);
+  const limit = query ? 6 : 12;
+  return results.slice(0, limit);
 }
 
 /** Checkout steps that auto-advance after product selection. */

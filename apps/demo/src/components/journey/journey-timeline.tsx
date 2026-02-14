@@ -34,7 +34,7 @@ export function JourneyTimeline({ events }: JourneyTimelineProps) {
                 'flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium transition-all w-full justify-center',
                 reached
                   ? active
-                    ? `${stage.color} text-white shadow-sm`
+                    ? `${stage.color} text-white shadow-sm animate-pulse`
                     : `${stage.lightBg} ${stage.lightText}`
                   : 'bg-warm-100 text-brand-400'
               )}
