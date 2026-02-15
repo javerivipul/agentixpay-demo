@@ -28,13 +28,12 @@ if [ ! -f "apps/demo/.env.local" ]; then
 fi
 
 # Configuration
-BRANCH="${VERCEL_BRANCH:-vercel-deploy}"
 APP_DIR="${1:-apps/demo}"
 
 # Deploy demo app
-echo -e "${YELLOW}Deploying $APP_DIR from branch '$BRANCH'...${NC}"
+echo -e "${YELLOW}Deploying $APP_DIR...${NC}"
 cd $APP_DIR
-vercel --prod --yes --branch $BRANCH
+vercel --prod --yes
 
 echo -e "${GREEN}✅ Deployment complete!${NC}"
 echo ""
