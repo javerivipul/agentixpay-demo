@@ -35,9 +35,8 @@ coverage/
 npm-debug.log*
 pnpm-debug.log*
 
-# Demo reference code (not production)
-Demo_1/
-Demo_2/
+# Documentation (generated/local)
+docs/
 
 # Claude Code
 .claude/
