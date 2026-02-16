@@ -1,4 +1,19 @@
-export const MOCK_PRODUCTS = [
+// Auto-generated from local PostgreSQL database
+// Contains all ACTIVE products (100 items)
+
+export interface MockProduct {
+  id: string;
+  sku: string;
+  title: string;
+  description: string;
+  price: number;
+  currency: string;
+  images: Array<{ url: string; alt?: string }>;
+  inventory: { quantity: number; status: string };
+  category?: string;
+}
+
+export const MOCK_PRODUCTS: MockProduct[] = [
   {
     id: "cmlocxsaf00029hzc2e1luwkg",
     sku: "AYBL-001",
@@ -19,6 +34,28 @@ export const MOCK_PRODUCTS = [
     currency: "usd",
     images: [{ url: "https://cdn.shopify.com/s/files/1/0630/5461/0630/files/Psalm234ShadowofDeath-main.jpg?v=1731541553", alt: "Psalm 23:4 Shadow of Death Oversized T-Shirt" }],
     inventory: { quantity: 70, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxu8v00069hzcs78vey6d",
+    sku: "JOES-001",
+    title: "Gildan Unisex Softstyle® T-Shirt - Gildan 64000",
+    description: "A soft, durable unisex t-shirt made from ring-spun cotton with a modern classic fit and tear-away label.",
+    price: 397,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0733/1181/3883/files/32219_omf_fm_bd526dfb-48f6-4b4d-b035-10785825acd5.jpg?v=1770668799", alt: "Gildan Unisex Softstyle® T-Shirt - Gildan 64000" }],
+    inventory: { quantity: 107, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxv1t00089hzcey2oooda",
+    sku: "SILK-001",
+    title: "White T-Shirt",
+    description: "A silky, stretchable white t-shirt designed for easy sublimation and all-day comfort.",
+    price: 800,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0244/2091/files/NEWBlankWhiteShirtFront_2878fe56-744a-46b8-9e75-e8050db3ab3e.jpg?v=1740334833", alt: "White T-Shirt" }],
+    inventory: { quantity: 144, status: "in_stock" },
     category: "T-Shirts"
   },
   {
@@ -44,6 +81,28 @@ export const MOCK_PRODUCTS = [
     category: "T-Shirts"
   },
   {
+    id: "cmlocxxve000e9hzcas4v5iuc",
+    sku: "COMB-001",
+    title: "Pray For Peace. Prepare For War. Men's T-Shirt",
+    description: "Durable athletic fit T-shirt with custom graphic, designed for active men who value comfort and style.",
+    price: 3200,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/1654/9749/files/prayforpeacepinkrearmock.jpg?v=1746100949", alt: "Pray For Peace. Prepare For War. Men's T-Shirt" }],
+    inventory: { quantity: 124, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxykz000g9hzcoxlrquik",
+    sku: "CRAZ-001",
+    title: "Grateful Dead Surfs Up - Kona Coffee Dyed Short Sleeve Crewneck T-Shirt",
+    description: "A vibrant short sleeve crewneck T-shirt featuring a surfing skeleton design, dyed with exclusive Kona coffee and 50 SPF UV protection.",
+    price: 2520,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0834/2496/9023/files/2017258_1M.png?v=1767230701", alt: "Grateful Dead Surfs Up - Kona Coffee Dyed Short Sleeve Crewneck T-Shirt" }],
+    inventory: { quantity: 30, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
     id: "cmlocxyrh000i9hzcytjohghi",
     sku: "CLOT-001",
     title: "Tultex-202-Fine Jersey T-Shirt",
@@ -52,6 +111,28 @@ export const MOCK_PRODUCTS = [
     currency: "usd",
     images: [{ url: "https://cdn.shopify.com/s/files/1/0621/8389/9225/files/product_Tultex_10667_Shirt-Front-B10259242-Natural.jpg?v=1752330145", alt: "Tultex-202-Fine Jersey T-Shirt" }],
     inventory: { quantity: 67, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxyrt000k9hzca1x4wwba",
+    sku: "ROCK-001",
+    title: "Schmear Black Graphic T-Shirt",
+    description: "A relaxed fit black t-shirt for men featuring custom streetwear graphics and organic cotton comfort.",
+    price: 900,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/1238/9850/files/01_4410984b-1523-49f3-b299-40d018d248d0.webp?v=1758147650", alt: "Schmear Black Graphic T-Shirt" }],
+    inventory: { quantity: 104, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxys6000m9hzckxl5cssi",
+    sku: "GOAT-002",
+    title: "OG Athletic T-Shirt",
+    description: "A smooth, moisture-wicking athletic t-shirt designed for comfort and performance during any activity.",
+    price: 1500,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/2264/4629/files/og-athletic-t-shirtmens-topsgoat-usa-7781048.jpg?v=1761956712", alt: "OG Athletic T-Shirt" }],
+    inventory: { quantity: 141, status: "in_stock" },
     category: "T-Shirts"
   },
   {
@@ -74,6 +155,83 @@ export const MOCK_PRODUCTS = [
     currency: "usd",
     images: [{ url: "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/1_14_f2466a52-ef7b-404b-91dd-dce1af615c02.jpg?v=1761769972", alt: "Basic Lightweight Tee" }],
     inventory: { quantity: 84, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxyu3000s9hzcd3hq1w0d",
+    sku: "SUZU-001",
+    title: "Cherry Blossom T-Shirt",
+    description: "Japanese-inspired unisex t-shirt made from soft, durable 100% cotton with vibrant DTG prints.",
+    price: 4499,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0636/1386/2123/files/CherryBlossomBack_Back_Beige.png?v=1755109561", alt: "Cherry Blossom T-Shirt" }],
+    inventory: { quantity: 121, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxyua000u9hzcg300v3dt",
+    sku: "GHOS-001",
+    title: "CLUB T-SHIRT",
+    description: "A premium cotton-poly blend t-shirt with relaxed fit and signature golf-inspired details for all-day comfort.",
+    price: 4000,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0306/5023/7068/files/Club-Tshirt_Black_Front.jpg?v=1749438516", alt: "CLUB T-SHIRT" }],
+    inventory: { quantity: 27, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxyuj000w9hzc1ujoqpzo",
+    sku: "THRE-001",
+    title: "Create Your Own Custom Bootleg Tee",
+    description: "Design your own unique unisex t-shirt with photos, text, and effects, made from premium cotton and printed to order.",
+    price: 3514,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0045/7349/5389/files/Navy-1.jpg?v=1744069472", alt: "Create Your Own Custom Bootleg Tee" }],
+    inventory: { quantity: 64, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxyuz000y9hzcpc3j94if",
+    sku: "PAKA-001",
+    title: "Men's Essential Tee",
+    description: "A soft, breathable, and odor-resistant men's tee made from alpaca fiber and organic pima cotton for all-day comfort.",
+    price: 5500,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/1429/6162/files/Men_sEssentialTeeAndeanMoss-1.webp?v=1767027026", alt: "Men's Essential Tee" }],
+    inventory: { quantity: 101, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxyv500109hzc1867mdjv",
+    sku: "COMF-002",
+    title: "Camo Tee",
+    description: "Heavyweight oversized tee with nature-inspired camo print and ultra-soft cotton jersey for all-day comfort.",
+    price: 2900,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0569/4029/8284/files/1_86e423af-90cc-4e24-8d8c-37e30c4b2e18.jpg?v=1759156991", alt: "Camo Tee" }],
+    inventory: { quantity: 138, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxyvi00129hzcdpyn1xft",
+    sku: "THRU-001",
+    title: "FORCE VELOCITY TECHNICAL T-SHIRT",
+    description: "A high-performance short sleeve training shirt engineered for demanding physical workouts with advanced abrasion resistance and moisture management.",
+    price: 12249,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0591/0164/2941/files/force-velocity-technical-tshirt-khaki_m_khaki_ss_1_f7f535f8-a16c-4356-807b-6e2c2db16ce4.jpg?v=1763049777", alt: "FORCE VELOCITY TECHNICAL T-SHIRT" }],
+    inventory: { quantity: 44, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxyvz00149hzcohxaczdh",
+    sku: "MIXE-001",
+    title: "Brown “Apocalypse” Tee",
+    description: "A unisex cotton t-shirt featuring a bold art and text graphic, designed for streetwear enthusiasts.",
+    price: 4000,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0431/5922/4484/files/IMG-5641.jpg?v=1760582964", alt: "Brown “Apocalypse” Tee" }],
+    inventory: { quantity: 81, status: "in_stock" },
     category: "T-Shirts"
   },
   {
@@ -110,6 +268,17 @@ export const MOCK_PRODUCTS = [
     category: "T-Shirts"
   },
   {
+    id: "cmlocxyxf001c9hzcn8bdnv16",
+    sku: "TFAS-001",
+    title: "TFashion Graphic Tee - Scarface (1)",
+    description: "A high quality, comfortable graphic tee featuring Scarface movie design, perfect for fans and everyday wear.",
+    price: 2350,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0623/0494/4365/files/WhiteMinimalistPastryPromotionInstagramPost_35_b0700113-8475-41ac-b49a-47fba9eae312.png?v=1768420783", alt: "TFashion Graphic Tee - Scarface (1)" }],
+    inventory: { quantity: 98, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
     id: "cmlocxyxo001e9hzcekw1jwun",
     sku: "HYPE-003",
     title: "'LOST ARCHIVES' GRAPHIC TEE",
@@ -118,6 +287,17 @@ export const MOCK_PRODUCTS = [
     currency: "usd",
     images: [{ url: "https://cdn.shopify.com/s/files/1/0697/5422/4935/files/vest_6773bf8b-57bc-43b3-a26f-30e8c8643a29.png?v=1733924745", alt: "'LOST ARCHIVES' GRAPHIC TEE" }],
     inventory: { quantity: 135, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxz15001g9hzclnnefqew",
+    sku: "MIXE-002",
+    title: "Black “Monster” cropped Tee",
+    description: "A cropped black tee featuring a bold 'Black Monster' graphic, perfect for streetwear and urban style.",
+    price: 4000,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0431/5922/4484/files/IMG-5600.jpg?v=1722432641", alt: "Black “Monster” cropped Tee" }],
+    inventory: { quantity: 41, status: "in_stock" },
     category: "T-Shirts"
   },
   {
@@ -132,25 +312,135 @@ export const MOCK_PRODUCTS = [
     category: "T-Shirts"
   },
   {
+    id: "cmlocxz1q001k9hzcmeim3l7n",
+    sku: "OBSE-001",
+    title: "Michael Graphic Tee",
+    description: "Heavyweight cotton graphic tee with oversized fit and unique print, made in the USA.",
+    price: 2499,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0598/2856/8200/files/TysonJordanJackson.jpg?v=1763615177", alt: "Michael Graphic Tee" }],
+    inventory: { quantity: 115, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
     id: "cmlocxz2b001m9hzcppeygpip",
     sku: "YOUN-003",
-    title: "4191 - AOT© x YLA Classic Tees",
+    title: "4191 - AOT©  x YLA Classic Tees",
     description: "Officially licensed Attack on Titan graphic tees with bold, detailed prints and a relaxed fit for standout style and comfort.",
     price: 4000,
     currency: "usd",
-    images: [{ url: "https://cdn.shopify.com/s/files/1/1775/6429/files/4191_attack-titan_003_08_20_floor_94f49c19-b6e9-4e31-b722-8f534a042ad8.jpg?v=1732308335", alt: "4191 - AOT© x YLA Classic Tees" }],
+    images: [{ url: "https://cdn.shopify.com/s/files/1/1775/6429/files/4191_attack-titan_003_08_20_floor_94f49c19-b6e9-4e31-b722-8f534a042ad8.jpg?v=1732308335", alt: "4191 - AOT©  x YLA Classic Tees" }],
     inventory: { quantity: 21, status: "in_stock" },
     category: "T-Shirts"
   },
   {
-    id: "cmlocxzh7002a9hzc69ci7bqe",
-    sku: "TRUE-001",
-    title: "Black Classic Crew Neck 6-Pack",
-    description: "A set of six premium fitted black crew neck t-shirts made from a soft, stretchy cotton-polyester blend for all-day comfort.",
-    price: 10999,
+    id: "cmlocxz42001o9hzci08rva5g",
+    sku: "CHEA-001",
+    title: "Gildan - Unisex Heavy Cotton™ T-Shirt - 5000",
+    description: "A premium 100 percent cotton t-shirt designed for superior comfort, durability, and printability.",
+    price: 637,
     currency: "usd",
-    images: [{ url: "https://cdn.shopify.com/s/files/1/0220/4008/4552/products/ALLBLACK_6PACK_f44f05b5-b0ef-48d1-bda5-79a2d0dbc3a4.jpg?v=1758668737", alt: "Black Classic Crew Neck 6-Pack" }],
-    inventory: { quantity: 72, status: "in_stock" },
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0673/9483/0522/files/33474_f_fm_92aa3e66-efaf-43ab-a152-8910ba9591f0.jpg?v=1748504834", alt: "Gildan - Unisex Heavy Cotton™ T-Shirt - 5000" }],
+    inventory: { quantity: 58, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxz5s001q9hzcj573n9gt",
+    sku: "AIFA-001",
+    title: "Pro Club Men's Heavyweight Cotton Short Sleeve Crew Neck T-Shirt",
+    description: "A durable, heavyweight cotton t-shirt with a classic fit and legendary Pro Club quality for everyday comfort and style.",
+    price: 978,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0682/8192/5848/files/ProClubMen_sHeavyweightCottonShortSleeveCrewNeckT-Shirt-Charcoal-1.jpg?v=1725870568", alt: "Pro Club Men's Heavyweight Cotton Short Sleeve Crew Neck T-Shirt" }],
+    inventory: { quantity: 95, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxz7s001s9hzc45s1w8yb",
+    sku: "AVIV-001",
+    title: "Gildan Heavy Cotton G5000 Adult T-Shirt",
+    description: "A 100 percent cotton t-shirt offering comfort, durability, and a smooth fit for everyday wear.",
+    price: 489,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/1601/3709/files/G5000_HTHR_MILITARY_GREEN.jpg?v=1761852496", alt: "Gildan Heavy Cotton G5000 Adult T-Shirt" }],
+    inventory: { quantity: 132, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxz8b001u9hzcu08k6k06",
+    sku: "BLUV-001",
+    title: "Old Man Power Cotton T-Shirt",
+    description: "Ultra-soft 100% cotton t-shirt with a tagless, ribbed collar for all-day comfort.",
+    price: 2298,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0830/7562/9344/files/RoyalBlue_5c57005d-4471-436c-8c11-aa1b1554e7cc.png?v=1753691394", alt: "Old Man Power Cotton T-Shirt" }],
+    inventory: { quantity: 38, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzax001w9hzcok4fu7ex",
+    sku: "CLOT-002",
+    title: "Gildan-3000-Light Cotton T-Shirt",
+    description: "A soft, durable cotton t-shirt with modern fit and improved printability for everyday comfort.",
+    price: 253,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0621/8389/9225/files/product_Gildan_12514_Shirt-Front-B02860112-Navy.jpg?v=1751933595", alt: "Gildan-3000-Light Cotton T-Shirt" }],
+    inventory: { quantity: 75, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzc2001y9hzcgi0dpbn3",
+    sku: "NATU-001",
+    title: "Boho Cotton Tee Shirt - Rust Folk Flower",
+    description: "A soft, relaxed-fit cotton tee with a vibrant floral pattern for everyday comfort.",
+    price: 3200,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0409/9656/9251/files/484A5893_20copy.webp?v=1750116737", alt: "Boho Cotton Tee Shirt - Rust Folk Flower" }],
+    inventory: { quantity: 112, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzd600209hzcwnfnj60r",
+    sku: "TFAS-002",
+    title: "Pro Club Men's Heavyweight Cotton Short Sleeve Crew Neck T-Shirt",
+    description: "A classic crew neck t-shirt made from heavyweight cotton, designed for lasting comfort and shape after repeated washes.",
+    price: 1650,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0623/0494/4365/files/dsc7738_1.jpg?v=1767210729", alt: "Pro Club Men's Heavyweight Cotton Short Sleeve Crew Neck T-Shirt" }],
+    inventory: { quantity: 149, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzdy00229hzciv2cjled",
+    sku: "BLUV-002",
+    title: "Mr. Old Rabbit Cotton T-Shirt",
+    description: "A soft, durable cotton T-shirt with unique graphic prints and a flattering fit for everyday wear or workouts.",
+    price: 2298,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0830/7562/9344/files/MilitaryGreen_378c306e-2b73-46c5-8627-d7ae0aaa2ff4.png?v=1743588979", alt: "Mr. Old Rabbit Cotton T-Shirt" }],
+    inventory: { quantity: 55, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzeg00249hzcs8mpu0da",
+    sku: "CLOT-003",
+    title: "Gildan-5000-Heavy Cotton™ T-Shirt",
+    description: "A durable, soft cotton t-shirt designed for everyday comfort and printability.",
+    price: 271,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0621/8389/9225/files/product_Gildan_16_Shirt-Front-B00060723-NeonBlue.jpg?v=1752015606", alt: "Gildan-5000-Heavy Cotton™ T-Shirt" }],
+    inventory: { quantity: 92, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzfb00269hzcfq34wf3x",
+    sku: "BLUV-003",
+    title: "Be You Cotton T-Shirt",
+    description: "A soft, regular fit 100% cotton t-shirt with motivational text, designed for all-day comfort and durability.",
+    price: 2298,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0830/7562/9344/files/Military_Green_59df5786-2ce5-45a9-bdc7-0cc02a942447.png?v=1767347025", alt: "Be You Cotton T-Shirt" }],
+    inventory: { quantity: 129, status: "in_stock" },
     category: "T-Shirts"
   },
   {
@@ -165,6 +455,94 @@ export const MOCK_PRODUCTS = [
     category: "T-Shirts"
   },
   {
+    id: "cmlocxzh7002a9hzc69ci7bqe",
+    sku: "TRUE-001",
+    title: "Black Classic Crew Neck 6-Pack",
+    description: "A set of six premium fitted black crew neck t-shirts made from a soft, stretchy cotton-polyester blend for all-day comfort.",
+    price: 10999,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0220/4008/4552/products/ALLBLACK_6PACK_f44f05b5-b0ef-48d1-bda5-79a2d0dbc3a4.jpg?v=1758668737", alt: "Black Classic Crew Neck 6-Pack" }],
+    inventory: { quantity: 72, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzhx002c9hzc8i13ks5s",
+    sku: "MUTI-001",
+    title: "Black Everyday T-Shirt",
+    description: "A heavyweight, boxy-fit black t-shirt with a bold eagle graphic, crafted from 100% combed cotton for lasting comfort and style.",
+    price: 5053,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0271/9331/1312/files/UTBS2Square.png?v=1754437737", alt: "Black Everyday T-Shirt" }],
+    inventory: { quantity: 109, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzij002e9hzc34zh79jh",
+    sku: "SUNT-001",
+    title: "Black Short sleeve t-shirt",
+    description: "A versatile black short sleeve t-shirt designed for comfort and easy customization.",
+    price: 350,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0256/6183/3304/products/PhotoRoom_20220314_180717.jpg?v=1725542079", alt: "Black Short sleeve t-shirt" }],
+    inventory: { quantity: 146, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzir002g9hzcey20winn",
+    sku: "DIXX-001",
+    title: "Represent T-Shirt - Black",
+    description: "A comfortable, stretchable black cotton t-shirt with a modern tapered fit and graphic details.",
+    price: 2899,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/1008/2786/files/A87A1210.jpg?v=1769753694", alt: "Represent T-Shirt - Black" }],
+    inventory: { quantity: 52, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzjv002i9hzctad52hl8",
+    sku: "TILV-001",
+    title: "Hard Days",
+    description: "A cotton-polyester blend t-shirt designed to inspire and support mental health awareness for veterans and their families.",
+    price: 2995,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/2217/7435/files/Dont-Let-The-Hard-Days-Win-Mens-Final-Mock-v1.jpg?v=1721954151", alt: "Hard Days" }],
+    inventory: { quantity: 89, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzk5002k9hzc1r4enf3r",
+    sku: "FADE-001",
+    title: "Box Fit T-Shirt ",
+    description: " Black",
+    price: NaN,
+    currency: "usd",
+    images: [{ url: "", alt: "Box Fit T-Shirt " }],
+    inventory: { quantity: [{"alt": "Box Fit T-Shirt , status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzm1002m9hzcsgfomwlf",
+    sku: "CAPO-001",
+    title: "Capo Egyptian Cotton T-Shirt - Black",
+    description: "Premium black cotton t-shirt offering a slim fit and comfortable stretch for everyday wear.",
+    price: 2028,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0076/8540/6777/files/36_23d03371-7ca2-4558-84ea-9afd518b5f8d.png?v=1724320432", alt: "Capo Egyptian Cotton T-Shirt - Black" }],
+    inventory: { quantity: 32, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzms002o9hzc8ltjfzh9",
+    sku: "AYBL-002",
+    title: "Sculpt T Shirt - Black",
+    description: "A second-skin sculpt T shirt designed for comfort, body shaping, and versatile wear during workouts or everyday activities.",
+    price: 3539,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/3000/0340/files/08.05.2025_Womens4824.jpg?v=1753892460", alt: "Sculpt T Shirt - Black" }],
+    inventory: { quantity: 69, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
     id: "cmlocxzn6002q9hzclunligzs",
     sku: "LTTS-001",
     title: "Blank T-shirt Short Sleeve",
@@ -176,25 +554,311 @@ export const MOCK_PRODUCTS = [
     category: "T-Shirts"
   },
   {
-    id: "cmlocy0pb00569hzcfufubpw5",
-    sku: "YOUN-004",
-    title: "4242 - Terry Oversized tee",
-    description: "Premium 100% cotton oversized tee with heavy terry fabric for structure and comfort.",
-    price: 3800,
+    id: "cmlocxznu002s9hzci43jgupx",
+    sku: "TRUE-002",
+    title: "White Classic Crew Neck 3-Pack",
+    description: "A set of three premium fitted white crew neck t-shirts made from a soft, stretchy cotton-polyester blend for all-day comfort.",
+    price: 6999,
     currency: "usd",
-    images: [{ url: "https://cdn.shopify.com/s/files/1/1775/6429/files/725A0273.jpg?v=1761676632", alt: "4242 - Terry Oversized tee" }],
-    inventory: { quantity: 31, status: "in_stock" },
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0220/4008/4552/products/ALLWHITECREW_3PACK.jpg?v=1764063227", alt: "White Classic Crew Neck 3-Pack" }],
+    inventory: { quantity: 143, status: "in_stock" },
     category: "T-Shirts"
   },
   {
-    id: "cmlocy0qr005e9hzc0cnbxstz",
-    sku: "BLAN-001",
-    title: "7.5 Oz. Max Heavyweight Oversized Tee | SHMHOT",
-    description: "Premium heavyweight cotton oversized tee offering comfort, durability, and a relaxed streetwear style.",
+    id: "cmlocxzoe002u9hzcx4embm57",
+    sku: "JAME-001",
+    title: "Short Sleeve Crew Neck - White",
+    description: "Ultra-soft 100% cotton crew neck tee with a classic fit and garment-dyed finish for a lived-in look.",
+    price: 8000,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0498/5713/4756/files/MLJ3311_WHT_0027_e3b42537-9673-4eec-a9f7-e2a2e464116b.jpg?v=1763672545", alt: "Short Sleeve Crew Neck - White" }],
+    inventory: { quantity: 49, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzou002w9hzckbnszzoj",
+    sku: "MERC-001",
+    title: "Relaxed Blank Tshirt White",
+    description: "A 100 percent cotton relaxed fit white t shirt for everyday comfort and style.",
+    price: 1632,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0082/0789/2576/files/XINqEOk.jpg?v=1737040151", alt: "Relaxed Blank Tshirt White" }],
+    inventory: { quantity: 86, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzpf002y9hzcwfyok8es",
+    sku: "AYBL-003",
+    title: "Varsity 2.0 Oversized T Shirt - White",
+    description: "Ultra-soft oversized t-shirt with dropped shoulders and ribbed neck for ultimate comfort and style.",
+    price: 2722,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/3000/0340/files/08.05.2025_Womens3133_13a304e4-1ba7-482d-b80b-d2e90d15600a.jpg?v=1752072585", alt: "Varsity 2.0 Oversized T Shirt - White" }],
+    inventory: { quantity: 123, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzpv00309hzcgwidjidq",
+    sku: "BODE-001",
+    title: "V Neck Slub T-shirt-White",
+    description: "A soft cotton V-neck T-shirt with angel sleeves and a flattering fit, available in multiple colors.",
+    price: 3900,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0680/4619/2892/files/25waut_t1795_wht_m01_aead000d-ddc3-468d-9a7d-cd591ae8e5af.jpg?v=1754483533", alt: "V Neck Slub T-shirt-White" }],
+    inventory: { quantity: 29, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzqr00329hzc9qq2sep7",
+    sku: "WHIT-001",
+    title: "Original V Neck T-Shirt - White",
+    description: "A relaxed-fit V-neck t-shirt made from ultra-soft 100% cotton jersey for everyday comfort and style.",
+    price: 3514,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0935/0236/files/white-and-co-original-v-neck-t-shirt-white_5.jpg?v=1722697458", alt: "Original V Neck T-Shirt - White" }],
+    inventory: { quantity: 66, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzrn00349hzchgpm93bm",
+    sku: "FADE-002",
+    title: "Box Fit T-Shirt ",
+    description: " White",
+    price: NaN,
+    currency: "usd",
+    images: [{ url: "", alt: "Box Fit T-Shirt " }],
+    inventory: { quantity: [{"alt": "Box Fit T-Shirt , status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzs600369hzctt37idcn",
+    sku: "JAME-002",
+    title: "Sheer Slub Casual V Neck - White",
+    description: "A premium 100% cotton slub V neck tee with a light sheer hand and fitted silhouette for modern casual style.",
+    price: 9000,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0498/5713/4756/files/WUA3695_WHT_9315.jpg?v=1725474574", alt: "Sheer Slub Casual V Neck - White" }],
+    inventory: { quantity: 140, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzsu00389hzcygjel4fy",
+    sku: "TRUE-003",
+    title: "White Classic Crew Neck 6-Pack",
+    description: "A set of six premium fitted white crew neck t-shirts made from a soft, stretchy cotton blend for all-day comfort.",
+    price: 10999,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0220/4008/4552/products/ALLWHITE_6PACK.jpg?v=1764063231", alt: "White Classic Crew Neck 6-Pack" }],
+    inventory: { quantity: 46, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxztw003a9hzcppau821n",
+    sku: "AYBL-004",
+    title: "Craft Oversized T Shirt - White",
+    description: "A relaxed-fit white cotton T-shirt with oversized styling and a tonal Aybl logo for all-day comfort.",
+    price: 3786,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/3000/0340/files/30.09.20243361_80820def-a220-47b8-95c8-386e74f93202.jpg?v=1728470841", alt: "Craft Oversized T Shirt - White" }],
+    inventory: { quantity: 83, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzvb003c9hzc7ehnd3fv",
+    sku: "PONC-001",
+    title: "The Blue Goose",
+    description: "A soft, stretchable flannel shirt with moisture-wicking, quick-drying fabric and built-in features for all-day comfort and utility.",
+    price: 9495,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0030/2963/1035/files/TheBlueGoose-Front.png?v=1757018691", alt: "The Blue Goose" }],
+    inventory: { quantity: 120, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzwu003e9hzc5e630l31",
+    sku: "BRON-001",
+    title: "Blue Chambray Work Shirt",
+    description: "A classic blue chambray work shirt crafted from cotton denim for timeless style and comfort.",
+    price: 3599,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0103/1838/1115/files/1_fa5cf83b-dbcb-468f-b0be-a1e0f0ffcca5.jpg?v=1725759350", alt: "Blue Chambray Work Shirt" }],
+    inventory: { quantity: 26, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzxa003g9hzcoqoa6skm",
+    sku: "FASH-001",
+    title: "Panel Trim Button Up Shirt - Blue",
+    description: "A stylish blue button up shirt with panel trim and a contrast fold down collar for a modern look.",
+    price: 1499,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0293/9277/files/11-24-25_S9_53_W23855420A_Blue_LR_DJ_14-24-13_1230_SKS.jpg?v=1764200446", alt: "Panel Trim Button Up Shirt - Blue" }],
+    inventory: { quantity: 63, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzxy003i9hzcwpu81b0s",
+    sku: "CRIQ-001",
+    title: "Top-Shelf Players Shirt - Navy Blue",
+    description: "A premium pima cotton polo with a stretch fit and removable collar stays for crisp, all-day comfort.",
+    price: 10400,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/2546/6304/files/DSC01558.jpg?v=1740413799", alt: "Top-Shelf Players Shirt - Navy Blue" }],
+    inventory: { quantity: 100, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzym003k9hzcz1u22olc",
+    sku: "NOAH-001",
+    title: "Stick Season Blue Spruce Tee",
+    description: "Classic relaxed fit t-shirt made from premium ring spun cotton with a vintage pigment-dyed finish.",
+    price: 4000,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0912/0736/9004/files/stickseasonblue_tee_front.png?v=1769562526", alt: "Stick Season Blue Spruce Tee" }],
+    inventory: { quantity: 137, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocxzyz003m9hzcu567vrv3",
+    sku: "TAYL-001",
+    title: "Taylor Swift ",
+    description: " The Eras Tour Blue T-Shirt",
+    price: NaN,
+    currency: "usd",
+    images: [{ url: "", alt: "Taylor Swift " }],
+    inventory: { quantity: [{"alt": "Taylor Swift , status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy00p003o9hzctu53frhk",
+    sku: "PONC-002",
+    title: "The Blue Bison",
+    description: "A soft, stretchy, and quick-drying flannel shirt with built-in lens cloth and sunglasses holder for all-day comfort and utility.",
+    price: 9495,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0030/2963/1035/files/TheBlueBison-Front.png?v=1757018575", alt: "The Blue Bison" }],
+    inventory: { quantity: 80, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy02h003q9hzccjj7gfmd",
+    sku: "FAHE-002",
+    title: "Short-Sleeve Movement™ Polo Shirt - Cardiff Blue Heather",
+    description: "A soft, stretchy polo blending classic style with performance comfort for versatile wear.",
+    price: 9800,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0359/8357/files/SP26-Faherty-Mens-MKS2425-CDB-Ss_Movement_Polo-Cardiff_Blue_Heather_OM_EDITORIAL_1_Web.jpg?v=1769107869", alt: "Short-Sleeve Movement™ Polo Shirt - Cardiff Blue Heather" }],
+    inventory: { quantity: 117, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy02q003s9hzcb1b4z3vf",
+    sku: "ONER-001",
+    title: "Mellow™ Soft Mid Short Sleeve T-Shirt ",
+    description: " True Blue",
+    price: NaN,
+    currency: "usd",
+    images: [{ url: "", alt: "Mellow™ Soft Mid Short Sleeve T-Shirt " }],
+    inventory: { quantity: [{"alt": "Mellow™ Soft Mid Short Sleeve T-Shirt , status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy031003u9hzcrosln1zr",
+    sku: "UNTU-001",
+    title: "Flannel Hemsworth Shirt",
+    description: "A supersoft cotton flannel shirt with a two-tone herringbone weave and western-inspired details for cool, casual style.",
+    price: 6900,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0129/1072/files/HEMSWORTH-UNTUCKIT-41234Sbl-FLANNEL-SOLID-REAL-TEAL-1.jpg?v=1755711098", alt: "Flannel Hemsworth Shirt" }],
+    inventory: { quantity: 60, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy04o003w9hzc2p9umc0o",
+    sku: "FASH-002",
+    title: "Classic Lightweight Tee - Red",
+    description: "A breathable 100 percent cotton crew neck tee in a vibrant red, designed for comfort and everyday wear.",
+    price: 600,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0293/9277/files/10-24-25_S7_12_NMKT30618_Red_ZSR_AE_JR_10-31-27_58241_PXF.jpg?v=1761586489", alt: "Classic Lightweight Tee - Red" }],
+    inventory: { quantity: 97, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy05n003y9hzcn962qxut",
+    sku: "ALOY-001",
+    title: "Alosoft Back For More Tee - Bright Red",
+    description: "A playful, body-hugging yoga tee with a sleek scooped back and ultra-soft fabric for all-day comfort.",
+    price: 6800,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/2185/2813/files/W1492R_06662_b2_s1_a1_m190.jpg?v=1763958014", alt: "Alosoft Back For More Tee - Bright Red" }],
+    inventory: { quantity: 134, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy05v00409hzco99ccz2g",
+    sku: "REST-001",
+    title: "Vale Forever Shooting Range Tee Red *In-Store Exclusive*",
+    description: "A limited edition red Vale Forever tee featuring a bold shooting range text design for streetwear fans.",
+    price: 10500,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0741/8799/7502/files/Vale-Forever-Shooting-Range-Tee-Red-front_6d008767-f059-4c51-a9dd-c1e88d160f04.jpg?v=1747249264", alt: "Vale Forever Shooting Range Tee Red *In-Store Exclusive*" }],
+    inventory: { quantity: 40, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy06500429hzcwlngqi1u",
+    sku: "FASH-003",
+    title: "Ed Hardy Rose Faith Short Sleeve Tee - Red",
+    description: "A stylish red short sleeve tee featuring a crew neck and screen print, made from a cotton-polyester blend for comfort and durability.",
+    price: 1499,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0293/9277/files/10-10-25_S9_44_EHM11009FN_Red_KF_PC_14-27-36_1836.jpg?v=1760478307", alt: "Ed Hardy Rose Faith Short Sleeve Tee - Red" }],
+    inventory: { quantity: 77, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy06b00449hzcdno7m75u",
+    sku: "FASH-004",
+    title: "Stitch Lovestruck Tee - Red",
+    description: "Oversized red cotton t-shirt with unique front and back graphics for a bold, comfortable look.",
+    price: 1099,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0293/9277/files/12-11-25_S1_38_AB1010S9873A_Red_JG_DR_14-24-18_14940_SKS.jpg?v=1765924291", alt: "Stitch Lovestruck Tee - Red" }],
+    inventory: { quantity: 114, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy06m00469hzc34jwaskf",
+    sku: "FASH-005",
+    title: "Kyle Oversized Tee - Red",
+    description: "A bold red oversized t-shirt with a soft cotton blend for everyday comfort and style.",
     price: 1200,
     currency: "usd",
-    images: [{ url: "https://cdn.shopify.com/s/files/1/0494/9979/9712/files/max_overweight_oversized_off_black_001.jpg?v=1761059806", alt: "7.5 Oz. Max Heavyweight Oversized Tee | SHMHOT" }],
-    inventory: { quantity: 48, status: "in_stock" },
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0293/9277/files/02-20-24_S7_55_ZDF01K410070_Red_CC_KF_DJ_13-13-44_33897_RB.jpg?v=1725507978", alt: "Kyle Oversized Tee - Red" }],
+    inventory: { quantity: 20, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy08000489hzcjte85yzr",
+    sku: "COLD-001",
+    title: "CURVED TEE RACING RED",
+    description: "A boxy fit cotton tee in racing red with bold logo graphics and a comfortable oversized silhouette.",
+    price: 5322,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0039/1839/7529/files/2025_04_11_COLD_CULTURE0110.jpg?v=1744803418", alt: "CURVED TEE RACING RED" }],
+    inventory: { quantity: 57, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy08q004a9hzc5bxgxosa",
+    sku: "REST-002",
+    title: "Godspeed F1 World Cup Layered Tee Red",
+    description: "A stylish layered tee featuring F1 and World Cup artwork, perfect for fans and streetwear enthusiasts.",
+    price: 20000,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0741/8799/7502/files/Godspeed-F1-World-Cup-Layered-Tee-Red-front.jpg?v=1760482839", alt: "Godspeed F1 World Cup Layered Tee Red" }],
+    inventory: { quantity: 94, status: "in_stock" },
     category: "T-Shirts"
   },
   {
@@ -209,16 +873,247 @@ export const MOCK_PRODUCTS = [
     category: "T-Shirts"
   },
   {
-    id: "cmlocy05n003y9hzcn962qxut",
-    sku: "ALOY-001",
-    title: "Alosoft Back For More Tee - Bright Red",
-    description: "A playful, body-hugging yoga tee with a sleek scooped back and ultra-soft fabric for all-day comfort.",
-    price: 6800,
+    id: "cmlocy0dr004e9hzc0ezvyvbb",
+    sku: "REAS-001",
+    title: "Forever Short Sleeve Tee - Red",
+    description: "A comfortable red short sleeve tee with a front graphic print, made from 100% cotton for everyday wear.",
+    price: 998,
     currency: "usd",
-    images: [{ url: "https://cdn.shopify.com/s/files/1/2185/2813/files/W1492R_06662_b2_s1_a1_m190.jpg?v=1763958014", alt: "Alosoft Back For More Tee - Bright Red" }],
-    inventory: { quantity: 134, status: "in_stock" },
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0178/0090/files/2025-12-17_DIP07_RED_9665.jpg?v=1766511415", alt: "Forever Short Sleeve Tee - Red" }],
+    inventory: { quantity: 37, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0fc004g9hzc069ylf19",
+    sku: "ONER-002",
+    title: "Mellow™ Soft Mid Short Sleeve T-Shirt ",
+    description: " Forest Green",
+    price: NaN,
+    currency: "usd",
+    images: [{ url: "", alt: "Mellow™ Soft Mid Short Sleeve T-Shirt " }],
+    inventory: { quantity: [{"alt": "Mellow™ Soft Mid Short Sleeve T-Shirt , status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0hc004i9hzczfywxy44",
+    sku: "LEGE-001",
+    title: "PREMIUM BASICS T-SHIRT - ARMY GREEN",
+    description: "A snug-fit cotton t-shirt designed to accentuate your biceps and chest with a comfortable, loose fit around the waist.",
+    price: 3402,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/1534/4437/files/legend-london-t-shirt-premium-basics-t-shirt-army-green-1160672962.jpg?v=1746278121", alt: "PREMIUM BASICS T-SHIRT - ARMY GREEN" }],
+    inventory: { quantity: 111, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0i3004k9hzcqh5upy1v",
+    sku: "GRUN-001",
+    title: "Women's Magically Delicious Slim Fit T-Shirt - Kelly Green",
+    description: "A bold, slim fit t-shirt in Kelly Green with a sharp, comfortable design for women who embrace their individuality.",
+    price: 2999,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/1258/3447/files/BlankPoster_2000x2000_V4_c11a67de-922e-4e79-8e0c-de45a0c16277.jpg?v=1767888925", alt: "Women's Magically Delicious Slim Fit T-Shirt - Kelly Green" }],
+    inventory: { quantity: 148, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0ii004m9hzcj75kokzk",
+    sku: "SCUF-001",
+    title: "Costa Green T-Shirt",
+    description: "A unisex green t-shirt with a round neckline and short sleeves, ideal for everyday streetwear style.",
+    price: 5322,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0035/9828/6912/files/84356619830272.jpg?v=1747727869", alt: "Costa Green T-Shirt" }],
+    inventory: { quantity: 54, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0j0004o9hzcn9zi8aiy",
+    sku: "ONER-003",
+    title: "Classic Oversized Lightweight T-Shirt ",
+    description: " Racing Green",
+    price: NaN,
+    currency: "usd",
+    images: [{ url: "", alt: "Classic Oversized Lightweight T-Shirt " }],
+    inventory: { quantity: [{"alt": "Classic Oversized Lightweight T-Shirt , status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0k5004q9hzcilsc2f8s",
+    sku: "GRUN-002",
+    title: "Magically Delicious T-Shirt - Kelly Green",
+    description: "A bold, comfortable Irish-themed t-shirt with a relaxed fit and durable construction for everyday wear.",
+    price: 2999,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/1258/3447/files/Blank_Poster_2000x2000_V6_GS7844_Magically_Delicious.jpg?v=1767888889", alt: "Magically Delicious T-Shirt - Kelly Green" }],
+    inventory: { quantity: 128, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0kl004s9hzc4ezcdtmy",
+    sku: "AYBL-005",
+    title: "Essential Oversized T Shirt - Slate Green",
+    description: "A soft cotton oversized T-shirt with a tonal AYBL logo and dropped shoulder design for all-day comfort and style.",
+    price: 3811,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/3000/0340/files/07_01_25_MensEcom0699_a61d4626-4f2a-4226-abf9-51c805fed6e2.jpg?v=1737380733", alt: "Essential Oversized T Shirt - Slate Green" }],
+    inventory: { quantity: 34, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0nh004u9hzcscdbt4qv",
+    sku: "FRES-002",
+    title: "Mercury Green Crew Neck",
+    description: "A super soft crew neck shirt with durable construction and a perfect fit, designed for lasting comfort and color.",
+    price: 2300,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/2988/4106/files/CREWNECKSMercuryGreen.jpg?v=1725760511", alt: "Mercury Green Crew Neck" }],
+    inventory: { quantity: 71, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0nl004w9hzc0gres0qb",
+    sku: "CHEE-001",
+    title: "Gildan Softstyle * Heather Military Green",
+    description: "A soft, durable unisex t-shirt made from a cotton-polyester blend in a modern classic fit, ideal for comfortable everyday wear.",
+    price: 450,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0538/8890/9497/products/33312_f_fl.jpg?v=1725544598", alt: "Gildan Softstyle * Heather Military Green" }],
+    inventory: { quantity: 108, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0nr004y9hzcbxni4wv5",
+    sku: "NINE-001",
+    title: "Freedom Isn't Free - T-Shirt",
+    description: "A green tri-blend t-shirt featuring a bold text graphic celebrating freedom and equality.",
+    price: 2999,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0017/7143/8146/products/t-shirt-freedom-isnt-free-137163.png?v=1725819849", alt: "Freedom Isn't Free - T-Shirt" }],
+    inventory: { quantity: 145, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0o700509hzcynbpx5kg",
+    sku: "MUSC-001",
+    title: "Fizz Oversized Tee - Maple",
+    description: "A bold, oversized cotton tee featuring Fizz artwork and a comfortable, relaxed fit.",
+    price: 4924,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0017/6075/5779/files/fizz-oversized-tee-maple-liberty-zero-rise-bike-shorts-maple-Muscle-Nation.jpg?v=1767975621", alt: "Fizz Oversized Tee - Maple" }],
+    inventory: { quantity: 51, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0oo00529hzc1lv3h5jk",
+    sku: "ICED-001",
+    title: "Reze (WEAPON) - Oversized Heavy Tee",
+    description: "Heavyweight oversized cotton tee with local, eco-friendly printing and unisex fit.",
+    price: 4999,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0893/7504/7961/files/oversized-faded-t-shirt-faded-khaki-front-68fcb3a32d5c9.jpg?v=1762984677", alt: "Reze (WEAPON) - Oversized Heavy Tee" }],
+    inventory: { quantity: 88, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0p200549hzc27hqz1t0",
+    sku: "FASH-006",
+    title: "X Men 1997 Oversized Short Sleeve Tee - Black",
+    description: "Oversized black short sleeve tee featuring X Men 1997 character print, made from 100% cotton.",
+    price: 1199,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0293/9277/files/11-15-23_S7_26_23015429_Black_CZ_DJ_09-55-47_70421_CM.jpg?v=1725507365", alt: "X Men 1997 Oversized Short Sleeve Tee - Black" }],
+    inventory: { quantity: 125, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0pb00569hzcfufubpw5",
+    sku: "YOUN-004",
+    title: "4242 - Terry Oversized tee",
+    description: "Premium 100% cotton oversized tee with heavy terry fabric for structure and comfort.",
+    price: 3800,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/1775/6429/files/725A0273.jpg?v=1761676632", alt: "4242 - Terry Oversized tee" }],
+    inventory: { quantity: 31, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0pl00589hzc3ybj40y1",
+    sku: "DARC-001",
+    title: "Our Clubs \"Premium\" Oversized Tee in Cream",
+    description: "Oversized premium tee made from ultra-soft 100% cotton for everyday comfort and style.",
+    price: 5500,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0866/5968/files/23TEES-HARLEYcopy.jpg?v=1768953550", alt: "Our Clubs \"Premium\" Oversized Tee in Cream" }],
+    inventory: { quantity: 68, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0pw005a9hzc9hb6g6kr",
+    sku: "PSYC-001",
+    title: "MENS DUSTIN OVERSIZED TEE - MT0200203",
+    description: "A relaxed-fit oversized tee crafted from a premium cotton modal blend with a subtle jacquard texture for elevated comfort and style.",
+    price: 8000,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/2304/1219/files/MT0200203-BLK_1.webp?v=1767728587", alt: "MENS DUSTIN OVERSIZED TEE - MT0200203" }],
+    inventory: { quantity: 105, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0qe005c9hzcesyj0a76",
+    sku: "DARC-002",
+    title: "The Eagle & The Wolf \"Premium\" Oversized Tee in Black",
+    description: "Premium oversized tee made from ultra-soft 100% cotton for everyday comfort and style.",
+    price: 6000,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0866/5968/files/49TEES-HARLEYcopy.jpg?v=1768953467", alt: "The Eagle & The Wolf \"Premium\" Oversized Tee in Black" }],
+    inventory: { quantity: 142, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0qr005e9hzc0cnbxstz",
+    sku: "BLAN-001",
+    title: "7.5 Oz. Max Heavyweight Oversized Tee ",
+    description: " SHMHOT",
+    price: NaN,
+    currency: "usd",
+    images: [{ url: "", alt: "7.5 Oz. Max Heavyweight Oversized Tee " }],
+    inventory: { quantity: [{"alt": "7.5 Oz. Max Heavyweight Oversized Tee , status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0r0005g9hzc74lnwoh4",
+    sku: "DARC-003",
+    title: "Inferno Wolf \"Premium\" Oversized Tee in Black",
+    description: "Oversized premium tee made from ultra-soft 100% cotton for everyday comfort and style.",
+    price: 6000,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0866/5968/files/21TEES-HARLEYcopy.jpg?v=1768953436", alt: "Inferno Wolf \"Premium\" Oversized Tee in Black" }],
+    inventory: { quantity: 85, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0re005i9hzc6lydvp9r",
+    sku: "LSKD-001",
+    title: "Go-To FLXCotton Oversized Tee - Open Air-White",
+    description: "Oversized fit tee made from soft cotton-spandex blend for comfort and flexibility.",
+    price: 5500,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0242/0156/0160/files/S-Model-Go-To-FLXCotton-Oversized-Tee-Open-Air-White-4.jpg?v=1756252881", alt: "Go-To FLXCotton Oversized Tee - Open Air-White" }],
+    inventory: { quantity: 122, status: "in_stock" },
+    category: "T-Shirts"
+  },
+  {
+    id: "cmlocy0s5005k9hzc7j8tmwgx",
+    sku: "STRI-001",
+    title: "Purple Rain 1984 Prince Black Vintage Washed T-Shirt",
+    description: "Vintage-inspired t-shirt featuring Purple Rain artwork from the 1984 album and film, perfect for fans and collectors.",
+    price: 3866,
+    currency: "usd",
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0745/3412/5855/files/STK_PURPLERAIN_318612518714_FRONT_MOCK.png?v=1722056418", alt: "Purple Rain 1984 Prince Black Vintage Washed T-Shirt" }],
+    inventory: { quantity: 28, status: "in_stock" },
     category: "T-Shirts"
   }
 ];
 
-export type MockProduct = typeof MOCK_PRODUCTS[number];
+export default MOCK_PRODUCTS;
