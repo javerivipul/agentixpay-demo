@@ -9,6 +9,8 @@ interface OrderEntry {
   itemCount: number;
   total: number;
   timestamp: string;
+  shippingAddress?: string;
+  paymentInfo?: string;
 }
 
 interface OrderFeedProps {
@@ -70,6 +72,16 @@ export function OrderFeed({ orders }: OrderFeedProps) {
                   minute: '2-digit',
                 })}
               </div>
+              {order.shippingAddress && (
+                <div className="text-xs text-brand-400 mt-0.5 font-semibold">
+                  {order.shippingAddress}
+                </div>
+              )}
+              {order.paymentInfo && (
+                <div className="text-xs text-brand-400 mt-0.5 font-medium">
+                  Charged to Visa on file ending with - <span className="font-bold">8359</span>
+                </div>
+              )}
             </div>
           </div>
           <div className="font-bold text-brand-900 text-sm">{formatCents(order.total)}</div>

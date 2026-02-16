@@ -15,6 +15,8 @@ interface OrderEntry {
   itemCount: number;
   total: number;
   timestamp: string;
+  shippingAddress?: string;
+  paymentInfo?: string;
 }
 
 export default function DemoPage() {
@@ -36,13 +38,18 @@ export default function DemoPage() {
     }
     const lineItems = checkout.line_items as Array<unknown> | undefined;
 
+    const shippingAddress = '145 Peachtree Ave, Atlanta, GA, 30303';
+    const paymentInfo = 'Charged to Visa on file ending with - 8359';
+
     setOrders((prev) => [
       {
         id: checkout.id as string,
         status: checkout.status as string,
-        itemCount: lineItems?.length ?? 1, // Default to 1 for mock checkout
+        itemCount: lineItems?.length ?? 1,
         total,
         timestamp: new Date().toISOString(),
+        shippingAddress,
+        paymentInfo,
       },
       ...prev,
     ]);
