@@ -96,11 +96,24 @@ export function createCheckoutSteps(): ScenarioStep[] {
       aiMessage: "Great choice! Creating a checkout for you now...",
       action: async (ctx) => {
         if (!ctx.selectedProduct) return {};
-        const checkout = await api.createCheckout([
-          { id: ctx.selectedProduct.id, quantity: 1 },
-        ]);
-        ctx.checkoutId = checkout.id;
-        return { checkout };
+        try {
+          const checkout = await api.createCheckout([
+            { id: ctx.selectedProduct.id, quantity: 1 },
+          ]);
+          ctx.checkoutId = checkout.id;
+          return { checkout };
+        } catch (error) {
+          // Mock checkout for demo mode (when API unavailable)
+          ctx.checkoutId = 'mock_checkout_' + Date.now();
+          return {
+            checkout: {
+              id: ctx.checkoutId,
+              status: 'pending',
+              total: ctx.selectedProduct.price,
+              currency: ctx.selectedProduct.currency,
+            }
+          };
+        }
       },
       journeyEvents: [
         { type: 'CHECKOUT_INIT', stage: 3, message: 'Agent initiated checkout session' },
@@ -111,22 +124,33 @@ export function createCheckoutSteps(): ScenarioStep[] {
       aiMessage: "Adding shipping address and calculating totals...",
       action: async (ctx) => {
         if (!ctx.checkoutId) return {};
-        const checkout = await api.updateCheckout(ctx.checkoutId, {
-          buyer: {
-            first_name: 'Jane',
-            last_name: 'Doe',
-            email: 'jane@example.com',
-          },
-          fulfillment_address: {
-            name: 'Jane Doe',
-            line_one: '123 Tech Blvd',
-            city: 'San Francisco',
-            state: 'CA',
-            country: 'US',
-            postal_code: '94107',
-          },
-        });
-        return { checkout };
+        try {
+          const checkout = await api.updateCheckout(ctx.checkoutId, {
+            buyer: {
+              first_name: 'Jane',
+              last_name: 'Doe',
+              email: 'jane@example.com',
+            },
+            fulfillment_address: {
+              name: 'Jane Doe',
+              line_one: '123 Tech Blvd',
+              city: 'San Francisco',
+              state: 'CA',
+              country: 'US',
+              postal_code: '94107',
+            },
+          });
+          return { checkout };
+        } catch (error) {
+          // Mock checkout update for demo mode
+          return {
+            checkout: {
+              id: ctx.checkoutId,
+              status: 'address_set',
+              buyer: { first_name: 'Jane', last_name: 'Doe' },
+            }
+          };
+        }
       },
       journeyEvents: [
         { type: 'ADDRESS_SET', stage: 4, message: 'Shipping address validated and set' },
@@ -137,11 +161,23 @@ export function createCheckoutSteps(): ScenarioStep[] {
       aiMessage: "Processing payment...",
       action: async (ctx) => {
         if (!ctx.checkoutId) return {};
-        const checkout = await api.completeCheckout(
-          ctx.checkoutId,
-          'spt_demo_' + Date.now()
-        );
-        return { checkout };
+        try {
+          const checkout = await api.completeCheckout(
+            ctx.checkoutId,
+            'spt_demo_' + Date.now()
+          );
+          return { checkout };
+        } catch (error) {
+          // Mock checkout completion for demo mode
+          return {
+            checkout: {
+              id: ctx.checkoutId,
+              status: 'completed',
+              total: ctx.selectedProduct?.price || 0,
+              currency: ctx.selectedProduct?.currency || 'usd',
+            }
+          };
+        }
       },
       journeyEvents: [
         { type: 'PAYMENT_PENDING', stage: 5, message: 'Payment token submitted for processing' },
