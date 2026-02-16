@@ -44,13 +44,24 @@ export default function Home() {
           </div>
         </div>
 
-        <Link
-          href="/demo"
-          className="inline-flex items-center gap-2 px-8 py-3.5 bg-blue-600 text-white rounded-full text-base font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20"
-        >
-          Launch Demo
-          <ArrowRight className="w-4 h-4" />
-        </Link>
+        <div className="flex items-center justify-center gap-4">
+          <Link
+            href="/demo"
+            className="inline-flex items-center gap-2 px-8 py-3.5 bg-blue-600 text-white rounded-full text-base font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20"
+          >
+            Launch Demo
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+          <a
+            href="https://agentix-dashboard.vercel.app/dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-3.5 bg-blue-600 text-white rounded-full text-base font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20"
+          >
+            Launch Dashboard
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </div>
 
         <p className="text-xs text-brand-400">
           Best experienced on desktop. Uses mock data — no real payments.
