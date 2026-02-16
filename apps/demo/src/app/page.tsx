@@ -29,9 +29,7 @@ export default function Home() {
         </h1>
 
         <p className="text-lg text-brand-700 max-w-lg mx-auto leading-relaxed">
-          Watch an AI agent browse products, create a checkout, and complete a
-          purchase — all through the Agentic Commerce Protocol. Real API calls,
-          real-time events.
+          Watch an AI agent browse products, create a checkout, and complete a purchase, powered by Agentix. Real API calls, real-time events.
         </p>
 
         <div className="flex items-center justify-center gap-6 text-sm text-brand-600">
