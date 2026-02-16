@@ -512,12 +512,12 @@ export const MOCK_PRODUCTS: MockProduct[] = [
   {
     id: "cmlocxzk5002k9hzc1r4enf3r",
     sku: "FADE-001",
-    title: "Box Fit T-Shirt ",
-    description: " Black",
-    price: NaN,
+    title: "Box Fit T-Shirt | Black",
+    description: "Heavyweight 220gsm cotton tee with a relaxed, oversized fit and premium ribbed details for all-day comfort.",
+    price: 2040,
     currency: "usd",
-    images: [{ url: "", alt: "Box Fit T-Shirt " }],
-    inventory: { quantity: [{"alt": "Box Fit T-Shirt , status: "in_stock" },
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0028/9914/8863/files/FD1750_BOXFITTSHIRT_BLACK_0000s_0003_FRONT.jpg?v=1752243515", alt: "Box Fit T-Shirt | Black" }],
+    inventory: { quantity: 126, status: "in_stock" },
     category: "T-Shirts"
   },
   {
@@ -622,12 +622,12 @@ export const MOCK_PRODUCTS: MockProduct[] = [
   {
     id: "cmlocxzrn00349hzchgpm93bm",
     sku: "FADE-002",
-    title: "Box Fit T-Shirt ",
-    description: " White",
-    price: NaN,
+    title: "Box Fit T-Shirt | White",
+    description: "Oversized white t-shirt made from heavyweight 220gsm cotton for all-day comfort and breathability.",
+    price: 2721,
     currency: "usd",
-    images: [{ url: "", alt: "Box Fit T-Shirt " }],
-    inventory: { quantity: [{"alt": "Box Fit T-Shirt , status: "in_stock" },
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0028/9914/8863/files/FD1750_BOXFITTSHIRT_WHITE_0000s_0000_FRONT.jpg?v=1752243496", alt: "Box Fit T-Shirt | White" }],
+    inventory: { quantity: 103, status: "in_stock" },
     category: "T-Shirts"
   },
   {
@@ -721,12 +721,12 @@ export const MOCK_PRODUCTS: MockProduct[] = [
   {
     id: "cmlocxzyz003m9hzcu567vrv3",
     sku: "TAYL-001",
-    title: "Taylor Swift ",
-    description: " The Eras Tour Blue T-Shirt",
-    price: NaN,
+    title: "Taylor Swift | The Eras Tour Blue T-Shirt",
+    description: "Official blue cotton T-shirt featuring Taylor Swift and The Eras Tour artwork, perfect for fans and collectors.",
+    price: 3915,
     currency: "usd",
-    images: [{ url: "", alt: "Taylor Swift " }],
-    inventory: { quantity: [{"alt": "Taylor Swift , status: "in_stock" },
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0011/4651/9637/files/MVZSbyiG9OMx4GRoc15zz0f9vpi4HPmq_1de5ff8f-4a0a-4a64-be86-10d19068a227_1.png?v=1749678849", alt: "Taylor Swift | The Eras Tour Blue T-Shirt" }],
+    inventory: { quantity: 43, status: "in_stock" },
     category: "T-Shirts"
   },
   {
@@ -754,12 +754,12 @@ export const MOCK_PRODUCTS: MockProduct[] = [
   {
     id: "cmlocy02q003s9hzcb1b4z3vf",
     sku: "ONER-001",
-    title: "Mellow™ Soft Mid Short Sleeve T-Shirt ",
-    description: " True Blue",
-    price: NaN,
+    title: "Mellow™ Soft Mid Short Sleeve T-Shirt | True Blue",
+    description: "A soft, performance-driven mid short sleeve t-shirt designed for active women seeking comfort and style during workouts or daily wear.",
+    price: 3200,
     currency: "usd",
-    images: [{ url: "", alt: "Mellow™ Soft Mid Short Sleeve T-Shirt " }],
-    inventory: { quantity: [{"alt": "Mellow™ Soft Mid Short Sleeve T-Shirt , status: "in_stock" },
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0427/4814/9916/files/MELLOW_SOFT_MID_SHORT_SLEEVE_T-SHIRT_TRUE_NAVY_01.jpg?v=1728483532", alt: "Mellow™ Soft Mid Short Sleeve T-Shirt | True Blue" }],
+    inventory: { quantity: 23, status: "in_stock" },
     category: "T-Shirts"
   },
   {
@@ -886,12 +886,12 @@ export const MOCK_PRODUCTS: MockProduct[] = [
   {
     id: "cmlocy0fc004g9hzc069ylf19",
     sku: "ONER-002",
-    title: "Mellow™ Soft Mid Short Sleeve T-Shirt ",
-    description: " Forest Green",
-    price: NaN,
+    title: "Mellow™ Soft Mid Short Sleeve T-Shirt | Forest Green",
+    description: "A soft, performance-driven mid short sleeve t-shirt designed for women seeking comfort and style in active lifestyles.",
+    price: 960,
     currency: "usd",
-    images: [{ url: "", alt: "Mellow™ Soft Mid Short Sleeve T-Shirt " }],
-    inventory: { quantity: [{"alt": "Mellow™ Soft Mid Short Sleeve T-Shirt , status: "in_stock" },
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0427/4814/9916/products/MELLOW_SOFT_MID_SHORT_SLEEVE_T_SHIRT_FOREST_GREEN_01.jpg?v=1728483306", alt: "Mellow™ Soft Mid Short Sleeve T-Shirt | Forest Green" }],
+    inventory: { quantity: 74, status: "in_stock" },
     category: "T-Shirts"
   },
   {
@@ -930,12 +930,12 @@ export const MOCK_PRODUCTS: MockProduct[] = [
   {
     id: "cmlocy0j0004o9hzcn9zi8aiy",
     sku: "ONER-003",
-    title: "Classic Oversized Lightweight T-Shirt ",
-    description: " Racing Green",
-    price: NaN,
+    title: "Classic Oversized Lightweight T-Shirt | Racing Green",
+    description: "A lightweight, oversized t-shirt designed for women seeking performance and comfort in activewear.",
+    price: 3200,
     currency: "usd",
-    images: [{ url: "", alt: "Classic Oversized Lightweight T-Shirt " }],
-    inventory: { quantity: [{"alt": "Classic Oversized Lightweight T-Shirt , status: "in_stock" },
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0427/4814/9916/files/NOOS_CLASSIC_OVERSIZED_LIGHTWEIGHT_T-SHIRT_RACINGGREEN_250716_PDP_1440x1800_01.jpg?v=1754044808", alt: "Classic Oversized Lightweight T-Shirt | Racing Green" }],
+    inventory: { quantity: 91, status: "in_stock" },
     category: "T-Shirts"
   },
   {
@@ -1073,12 +1073,12 @@ export const MOCK_PRODUCTS: MockProduct[] = [
   {
     id: "cmlocy0qr005e9hzc0cnbxstz",
     sku: "BLAN-001",
-    title: "7.5 Oz. Max Heavyweight Oversized Tee ",
-    description: " SHMHOT",
-    price: NaN,
+    title: "7.5 Oz. Max Heavyweight Oversized Tee | SHMHOT",
+    description: "Premium heavyweight cotton oversized tee offering comfort, durability, and a relaxed streetwear style.",
+    price: 1200,
     currency: "usd",
-    images: [{ url: "", alt: "7.5 Oz. Max Heavyweight Oversized Tee " }],
-    inventory: { quantity: [{"alt": "7.5 Oz. Max Heavyweight Oversized Tee , status: "in_stock" },
+    images: [{ url: "https://cdn.shopify.com/s/files/1/0494/9979/9712/files/max_overweight_oversized_off_black_001.jpg?v=1761059806", alt: "7.5 Oz. Max Heavyweight Oversized Tee | SHMHOT" }],
+    inventory: { quantity: 48, status: "in_stock" },
     category: "T-Shirts"
   },
   {
