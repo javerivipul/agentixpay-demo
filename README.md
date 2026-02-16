@@ -272,3 +272,4 @@ When modifying a package, everything downstream rebuilds automatically via Turbo
 
 **pnpm install errors with `workspace:*`**
 → Quote it in zsh: `pnpm add "@agentix/shared@workspace:*"`
+# Auto-deployment test
