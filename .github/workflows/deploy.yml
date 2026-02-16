@@ -14,6 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Setup Git
+        run: |
+          git config --global user.name "javerivipul"
+          git config --global user.email "javerivipul@gmail.com"
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
