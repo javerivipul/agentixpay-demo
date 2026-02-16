@@ -11,8 +11,8 @@ export default function Home() {
           <Image
             src="/agentix-circle.png"
             alt="AgentixPay Logo"
-            width={160}
-            height={160}
+            width={200}
+            height={200}
             className="rounded-full"
           />
         </div>
