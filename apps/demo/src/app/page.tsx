@@ -1,10 +1,22 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Bot, ShoppingBag, Zap } from 'lucide-react';
 
 export default function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-warm-50 via-warm-100 to-brand-100 px-6">
       <div className="max-w-2xl text-center space-y-8">
+        {/* Logo */}
+        <div className="flex justify-center">
+          <Image
+            src="/agentix-circle.png"
+            alt="AgentixPay Logo"
+            width={160}
+            height={160}
+            className="rounded-full"
+          />
+        </div>
+
         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-900/5 border border-brand-200 rounded-full text-sm text-brand-700 font-medium">
           <Zap className="w-3.5 h-3.5" />
           Live Demo
@@ -13,7 +25,7 @@ export default function Home() {
         <h1 className="text-5xl font-bold tracking-tight text-brand-950">
           AI Agents Meet
           <br />
-          <span className="text-brand-600">E-Commerce</span>
+          <span className="text-blue-800">E-Commerce</span>
         </h1>
 
         <p className="text-lg text-brand-700 max-w-lg mx-auto leading-relaxed">
@@ -36,7 +48,7 @@ export default function Home() {
 
         <Link
           href="/demo"
-          className="inline-flex items-center gap-2 px-8 py-3.5 bg-brand-900 text-white rounded-full text-base font-semibold hover:bg-brand-800 transition-colors shadow-lg shadow-brand-900/20"
+          className="inline-flex items-center gap-2 px-8 py-3.5 bg-blue-600 text-white rounded-full text-base font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20"
         >
           Launch Demo
           <ArrowRight className="w-4 h-4" />
