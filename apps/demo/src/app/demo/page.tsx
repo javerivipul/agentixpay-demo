@@ -27,15 +27,20 @@ export default function DemoPage() {
   }, []);
 
   const handleOrderComplete = useCallback((checkout: Record<string, unknown>) => {
+    // Try totals array first (real API), then fall back to direct total (mock)
     const totals = checkout.totals as Array<{ type: string; amount: number }> | undefined;
-    const total = totals?.find((t) => t.type === 'total')?.amount ?? 0;
+    let total = totals?.find((t) => t.type === 'total')?.amount ?? 0;
+    if (total === 0) {
+      // Fallback for mock checkout - get total directly
+      total = typeof checkout.total === 'number' ? checkout.total : 0;
+    }
     const lineItems = checkout.line_items as Array<unknown> | undefined;
 
     setOrders((prev) => [
       {
         id: checkout.id as string,
         status: checkout.status as string,
-        itemCount: lineItems?.length ?? 0,
+        itemCount: lineItems?.length ?? 1, // Default to 1 for mock checkout
         total,
         timestamp: new Date().toISOString(),
       },

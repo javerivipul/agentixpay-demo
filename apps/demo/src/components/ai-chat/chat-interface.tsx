@@ -179,8 +179,14 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
 
       // Check if order completed — use ref to avoid stale closure
       if (result.checkout && (result.checkout as Record<string, unknown>).status === 'completed') {
-        const totals = (result.checkout as Record<string, unknown>).totals as Array<{ type: string; amount: number }> | undefined;
-        const total = totals?.find((t) => t.type === 'total')?.amount ?? 0;
+        const checkout = result.checkout as Record<string, unknown>;
+        // Try totals array first (real API), then fall back to direct total (mock)
+        const totals = checkout.totals as Array<{ type: string; amount: number }> | undefined;
+        let total = totals?.find((t) => t.type === 'total')?.amount ?? 0;
+        if (total === 0) {
+          // Fallback for mock checkout - get total directly
+          total = typeof checkout.total === 'number' ? checkout.total : 0;
+        }
         statsRef.current = {
           orders: statsRef.current.orders + 1,
           revenue: statsRef.current.revenue + total,

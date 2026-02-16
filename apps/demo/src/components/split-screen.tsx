@@ -26,6 +26,13 @@ export function SplitScreen({ left, right, bottom }: SplitScreenProps) {
       <div className="h-[240px] shrink-0 p-3">
         {bottom}
       </div>
+
+      {/* Footer */}
+      <div className="h-8 shrink-0 px-3 pb-3 flex items-center justify-center">
+        <p className="text-xs text-brand-400">
+          Powered by <span className="font-semibold text-brand-600">AgentixPay</span>
+        </p>
+      </div>
     </div>
   );
 }
