@@ -1,5 +1,4 @@
 import * as api from './api';
-import { MOCK_PRODUCTS, type MockProduct } from './mock-products';
 
 export interface DemoMessage {
   id: string;
@@ -72,20 +71,8 @@ export async function searchProducts(query: string): Promise<DemoProduct[]> {
     const limit = query ? 6 : 12;
     return results.slice(0, limit);
   } catch (error) {
-    // Fallback to mock data when API is unavailable
-    const all = MOCK_PRODUCTS as unknown as DemoProduct[];
-    const q = query?.toLowerCase() || '';
-    let filtered = q 
-      ? all.filter(p => 
-          p.title.toLowerCase().includes(q) || 
-          p.description.toLowerCase().includes(q) ||
-          (p.category && p.category.toLowerCase().includes(q))
-        )
-      : all;
-    const affordable = filtered.filter((p: DemoProduct) => p.price <= 5000);
-    const results = affordable.length > 0 ? affordable : filtered;
-    const limit = query ? 6 : 12;
-    return results.slice(0, limit);
+    console.error('Product search failed', error);
+    return [];
   }
 }
 

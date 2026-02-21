@@ -3,6 +3,61 @@ import { createHash, randomBytes } from 'crypto';
 
 const prisma = new PrismaClient();
 
+const SHOPIFY_AUTH_URL = 'https://api.shopify.com/auth/access_token';
+const SHOPIFY_DISCOVERY_URL = 'https://discover.shopifyapps.com/global/mcp';
+const SHOPIFY_QUERIES = [
+  't-shirt',
+  'tshirt',
+  'graphic tee',
+  'cotton shirt',
+  'black t-shirt',
+  'white tshirt',
+  'blue shirt',
+  'red tee',
+  'green t-shirt',
+  'oversized tee',
+  'vintage tshirt',
+  'crew neck shirt',
+  'v-neck tee',
+  'printed t-shirt',
+  'plain tshirt',
+];
+
+interface ShopifyMoney {
+  amount?: number;
+}
+
+interface ShopifyMedia {
+  url?: string;
+}
+
+interface ShopifyAttribute {
+  name?: string;
+  values?: string[];
+}
+
+interface ShopifyVariant {
+  id?: string;
+  price?: ShopifyMoney;
+  sku?: string;
+  media?: ShopifyMedia[];
+  shop?: {
+    name?: string;
+    onlineStoreUrl?: string;
+  };
+  variantUrl?: string;
+  checkoutUrl?: string;
+}
+
+interface ShopifyOffer {
+  id?: string;
+  title?: string;
+  description?: string;
+  media?: ShopifyMedia[];
+  attributes?: ShopifyAttribute[];
+  variants?: ShopifyVariant[];
+}
+
 function generateApiKey(): string {
   return `agx_${randomBytes(24).toString('hex')}`;
 }
@@ -2014,8 +2069,192 @@ const SEED_PRODUCTS = [
   },
 ];
 
+type SeedProduct = (typeof SEED_PRODUCTS)[number];
+
+function normalizeTags(attributes: ShopifyAttribute[] | undefined): string[] {
+  if (!attributes || attributes.length === 0) {
+    return ['tshirt'];
+  }
+
+  const tags = attributes
+    .flatMap((attribute) => attribute.values || [])
+    .map((value) => value.trim().toLowerCase())
+    .filter((value) => value.length > 0);
+
+  if (!tags.includes('tshirt')) {
+    tags.push('tshirt');
+  }
+
+  return Array.from(new Set(tags));
+}
+
+async function getShopifyToken(clientId: string, clientSecret: string): Promise<string> {
+  const response = await fetch(SHOPIFY_AUTH_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      client_id: clientId,
+      client_secret: clientSecret,
+      grant_type: 'client_credentials',
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Shopify auth failed: ${response.status} ${response.statusText}`);
+  }
+
+  const payload = (await response.json()) as { access_token?: string };
+  if (!payload.access_token) {
+    throw new Error('Shopify auth response missing access_token');
+  }
+
+  return payload.access_token;
+}
+
+async function searchOffers(token: string, catalogId: string, query: string): Promise<ShopifyOffer[]> {
+  const response = await fetch(SHOPIFY_DISCOVERY_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'tools/call',
+      id: 1,
+      params: {
+        name: 'search_global_products',
+        arguments: {
+          query,
+          saved_catalog: catalogId,
+          limit: 10,
+          context: `Looking for ${query}`,
+        },
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Shopify product search failed for query "${query}": ${response.status} ${response.statusText}`);
+  }
+
+  const payload = (await response.json()) as {
+    result?: {
+      isError?: boolean;
+      content?: Array<{ text?: string }>;
+    };
+  };
+
+  if (payload.result?.isError) {
+    return [];
+  }
+
+  const content = payload.result?.content?.[0]?.text;
+  if (!content) {
+    return [];
+  }
+
+  const parsed = JSON.parse(content) as { offers?: ShopifyOffer[] };
+  return parsed.offers || [];
+}
+
+function toSeedProduct(offer: ShopifyOffer, index: number): SeedProduct | null {
+  const variant = offer.variants?.[0];
+  if (!variant) {
+    return null;
+  }
+
+  const offerImage = offer.media?.[0]?.url;
+  const variantImage = variant.media?.[0]?.url;
+  const imageUrl = offerImage || variantImage;
+  if (!imageUrl) {
+    return null;
+  }
+
+  const amountCents = typeof variant.price?.amount === 'number' ? variant.price.amount : 0;
+  const price = Math.max(0.01, amountCents / 100);
+  const shopName = variant.shop?.name || 'Shopify';
+  const shopUrl = variant.shop?.onlineStoreUrl || '';
+  const shopDomain = shopUrl.replace(/^https?:\/\//, '').split('/')[0] || '';
+  const productUrl = variant.variantUrl || variant.checkoutUrl || shopUrl;
+
+  const materialAttribute = offer.attributes?.find((attribute) => attribute.name?.toLowerCase() === 'material');
+  const uniqueSellingPoint = materialAttribute?.values?.[0]
+    ? `Material: ${materialAttribute.values[0]}`
+    : 'Imported from Shopify Global Catalog';
+
+  const sku = variant.sku?.trim() || `SHOPIFY-${String(index + 1).padStart(3, '0')}`;
+
+  return {
+    externalId: variant.id || offer.id || `shopify_${index + 1}`,
+    sku,
+    title: offer.title || `Shopify Product ${index + 1}`,
+    description: offer.description || 'Imported from Shopify Global Catalog',
+    price,
+    inventoryQuantity: 100,
+    productType: 'T-Shirts',
+    vendor: shopName,
+    tags: normalizeTags(offer.attributes),
+    images: [{ url: imageUrl, alt: offer.title || `Shopify Product ${index + 1}` }],
+    metadata: {
+      rating: null,
+      uniqueSellingPoint,
+      topFeatures: ['Live product fetched from Shopify Global Catalog'],
+      shopDomain,
+      shopUrl,
+      productUrl,
+    },
+  };
+}
+
+async function loadLiveShopifyProducts(targetCount: number): Promise<SeedProduct[]> {
+  const clientId = process.env.SHOPIFY_CLIENT_ID;
+  const clientSecret = process.env.SHOPIFY_CLIENT_SECRET;
+  const catalogId = process.env.CATALOG_ID;
+
+  if (!clientId || !clientSecret || !catalogId) {
+    throw new Error('Missing SHOPIFY_CLIENT_ID, SHOPIFY_CLIENT_SECRET, or CATALOG_ID in environment');
+  }
+
+  const token = await getShopifyToken(clientId, clientSecret);
+  const offersById = new Map<string, ShopifyOffer>();
+
+  for (const query of SHOPIFY_QUERIES) {
+    if (offersById.size >= targetCount) {
+      break;
+    }
+
+    const offers = await searchOffers(token, catalogId, query);
+    for (const offer of offers) {
+      const id = offer.id;
+      if (!id || offersById.has(id)) {
+        continue;
+      }
+      offersById.set(id, offer);
+      if (offersById.size >= targetCount) {
+        break;
+      }
+    }
+  }
+
+  const mapped = Array.from(offersById.values())
+    .map((offer, index) => toSeedProduct(offer, index))
+    .filter((product): product is SeedProduct => product !== null)
+    .slice(0, targetCount);
+
+  if (mapped.length === 0) {
+    throw new Error('Shopify returned zero usable products');
+  }
+
+  return mapped;
+}
+
 async function main() {
   console.log('Seeding Agentix database...\n');
+
+  const targetCount = Number(process.env.SHOPIFY_PRODUCTS_TARGET_COUNT || 100);
+  const liveProducts = await loadLiveShopifyProducts(targetCount);
+  console.log(`Fetched ${liveProducts.length} live Shopify products`);
 
   // Clean existing data
   await prisma.checkoutEvent.deleteMany();
@@ -2037,7 +2276,7 @@ async function main() {
       name: 'T-Shirt Marketplace',
       email: 'demo@agentix.dev',
       companyName: 'Agentix Demo Inc.',
-      platform: 'CUSTOM',
+      platform: 'SHOPIFY',
       apiKey,
       apiSecretHash: hashSecret(apiSecret),
       status: 'ACTIVE',
@@ -2060,7 +2299,7 @@ async function main() {
 
   // Seed products (prices in dollars for Prisma Decimal)
   const now = new Date();
-  for (const p of SEED_PRODUCTS) {
+  for (const p of liveProducts) {
     await prisma.product.create({
       data: {
         tenantId: tenant.id,
@@ -2085,7 +2324,7 @@ async function main() {
     });
   }
 
-  console.log(`Seeded ${SEED_PRODUCTS.length} products\n`);
+  console.log(`Seeded ${liveProducts.length} products\n`);
 
   // Print usage instructions
   console.log('='.repeat(60));

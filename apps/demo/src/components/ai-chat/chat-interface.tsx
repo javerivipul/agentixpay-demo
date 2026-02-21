@@ -33,7 +33,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
     {
       id: 'welcome',
       sender: 'ai',
-      text: "Welcome to Agentix! We're connected to a Shopify store with 100 real t-shirts via the Agentic Commerce Protocol.\n\nPick a style to browse:",
+      text: "Welcome to Agentix! We're connected to a live Shopify catalog via the Agentic Commerce Protocol.\n\nPick a style to browse:",
       choices: STYLE_FILTERS,
     },
   ]);
@@ -216,7 +216,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
       {
         id: 'welcome',
         sender: 'ai',
-        text: "Welcome to Agentix! We're connected to a Shopify store with 100 real t-shirts via the Agentic Commerce Protocol.\n\nPick a style to browse:",
+        text: "Welcome to Agentix! We're connected to a live Shopify catalog via the Agentic Commerce Protocol.\n\nPick a style to browse:",
         choices: STYLE_FILTERS,
       },
     ]);
