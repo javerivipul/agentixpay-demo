@@ -1,6 +1,29 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 const API_KEY = process.env.NEXT_PUBLIC_DEMO_API_KEY || 'demo_key';
 
+export interface DemoProduct {
+  id: string;
+  sku: string;
+  title: string;
+  description: string;
+  price: number;
+  currency: string;
+  images: Array<{ url: string; alt?: string }>;
+  inventory: { quantity: number; status: string };
+  category?: string;
+  product_url?: string;
+  shop_name?: string;
+  shop_domain?: string;
+}
+
+export const LLM_MODELS = [
+  { value: 'none', label: 'No LLM (fast)' },
+  { value: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash' },
+  { value: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro' },
+  { value: 'gpt-4o-mini', label: 'GPT-4o mini' },
+  { value: 'gpt-4.1-mini', label: 'GPT-4.1 mini' },
+] as const;
+
 async function apiFetch(path: string, init?: RequestInit) {
   const res = await fetch(`${API_BASE}${path}`, {
     ...init,
@@ -21,6 +44,26 @@ export async function getProducts(query?: string) {
     method: 'GET',
     cache: 'no-store',
   });
+  return res.json();
+}
+
+export async function sendAgentChat(
+  message: string,
+  model: string,
+  history: Array<{ role: 'user' | 'assistant'; content: string }>
+): Promise<{ reply: string; products: DemoProduct[]; model_used: string }> {
+  const res = await fetch('/api/agent-chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, model, history }),
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    const errorBody = (await res.json().catch(() => ({}))) as { error?: string };
+    throw new Error(errorBody.error || 'Agent chat failed');
+  }
+
   return res.json();
 }
 
