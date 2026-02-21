@@ -17,7 +17,11 @@ export async function getProducts(query?: string) {
   const params = new URLSearchParams();
   if (query) params.set('query', query);
   params.set('limit', '20');
-  return apiFetch(`/acp/v1/products?${params}`);
+  const res = await fetch(`/api/shopify-products?${params.toString()}`, {
+    method: 'GET',
+    cache: 'no-store',
+  });
+  return res.json();
 }
 
 export async function createCheckout(items: Array<{ id?: string; sku?: string; quantity: number }>) {
