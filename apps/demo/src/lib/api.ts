@@ -50,12 +50,13 @@ export async function getProducts(query?: string) {
 export async function sendAgentChat(
   message: string,
   model: string,
-  history: Array<{ role: 'user' | 'assistant'; content: string }>
+  history: Array<{ role: 'user' | 'assistant'; content: string }>,
+  opts?: { protocol?: 'acp' | 'ucp'; store?: string }
 ): Promise<{ reply: string; products: DemoProduct[]; model_used: string }> {
   const res = await fetch('/api/agent-chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message, model, history }),
+    body: JSON.stringify({ message, model, history, protocol: opts?.protocol, store: opts?.store }),
     cache: 'no-store',
   });
 

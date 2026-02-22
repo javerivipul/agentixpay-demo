@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchShopifyProducts, type DemoProductResult } from '../_shopify';
+import { fetchShopifyProducts, type DemoProductResult, type DemoProtocol } from '../_shopify';
 
 type ChatMessage = { role: 'user' | 'assistant'; content: string };
 
@@ -7,6 +7,8 @@ type AgentChatBody = {
   message?: string;
   model?: string;
   history?: ChatMessage[];
+  protocol?: DemoProtocol;
+  store?: string;
 };
 
 const SUPPORTED_MODELS = [
@@ -120,12 +122,14 @@ export async function POST(request: NextRequest) {
     const body = (await request.json()) as AgentChatBody;
     const message = body.message?.trim();
     const model = normalizeModel(body.model);
+    const protocol: DemoProtocol = body.protocol === 'acp' ? 'acp' : 'ucp';
+    const store = body.store;
 
     if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
-    const products = await fetchShopifyProducts(message, 8);
+    const products = await fetchShopifyProducts(message, 8, { protocol, store });
     let reply: string | null = null;
 
     if (model.startsWith('gemini-')) {

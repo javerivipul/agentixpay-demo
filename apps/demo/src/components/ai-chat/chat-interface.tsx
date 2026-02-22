@@ -27,9 +27,11 @@ interface ChatInterfaceProps {
   onOrderComplete: (checkout: Record<string, unknown>) => void;
   onStatsUpdate: (stats: { orders: number; revenue: number }) => void;
   onReset: () => void;
+  protocol: 'acp' | 'ucp';
+  store: string;
 }
 
-export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, onReset }: ChatInterfaceProps) {
+export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, onReset, protocol, store }: ChatInterfaceProps) {
   const idRef = useRef(0);
   const checkoutInFlightRef = useRef(false);
   const sendInFlightRef = useRef(false);
@@ -83,7 +85,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
     onJourneyEvent(createJourneyEvent('PRODUCT_SEARCH', 1, `Agent searching live catalog: "${input}"`));
 
     try {
-      const result = await sendAgentChat(input, selectedModel, history);
+      const result = await sendAgentChat(input, selectedModel, history, { protocol, store });
       onJourneyEvent(createJourneyEvent('PRODUCT_RESULTS', 2, `Returned ${result.products.length} live results`));
 
       setMessages((prev) => {
@@ -114,7 +116,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
       setIsLoading(false);
       sendInFlightRef.current = false;
     }
-  }, [draft, isLoading, isCheckoutRunning, messages, nextId, onJourneyEvent, selectedModel]);
+  }, [draft, isLoading, isCheckoutRunning, messages, nextId, onJourneyEvent, protocol, selectedModel, store]);
 
   const handleSelectProduct = useCallback(async (product: DemoProduct) => {
     if (isLoading || isCheckoutRunning || checkoutInFlightRef.current) {
