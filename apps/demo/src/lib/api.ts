@@ -60,8 +60,20 @@ export async function sendAgentChat(
   });
 
   if (!res.ok) {
-    const errorBody = (await res.json().catch(() => ({}))) as { error?: string };
-    throw new Error(errorBody.error || 'Agent chat failed');
+    const contentType = res.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      const errorBody = (await res.json().catch(() => ({}))) as { error?: string };
+      throw new Error(errorBody.error || `Agent chat failed (${res.status})`);
+    }
+
+    const text = await res.text().catch(() => '');
+    throw new Error(`Agent chat failed (${res.status}): ${text.slice(0, 140) || res.statusText}`);
+  }
+
+  const okContentType = res.headers.get('content-type') || '';
+  if (!okContentType.includes('application/json')) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`Agent chat returned non-JSON response: ${text.slice(0, 140)}`);
   }
 
   return res.json();
