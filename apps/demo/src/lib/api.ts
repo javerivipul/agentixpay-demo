@@ -16,14 +16,6 @@ export interface DemoProduct {
   shop_domain?: string;
 }
 
-export const LLM_MODELS = [
-  { value: 'none', label: 'No LLM (fast)' },
-  { value: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash' },
-  { value: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro' },
-  { value: 'gpt-4o-mini', label: 'GPT-4o mini' },
-  { value: 'gpt-4.1-mini', label: 'GPT-4.1 mini' },
-] as const;
-
 async function apiFetch(path: string, init?: RequestInit) {
   const res = await fetch(`${API_BASE}${path}`, {
     ...init,
@@ -49,14 +41,13 @@ export async function getProducts(query?: string) {
 
 export async function sendAgentChat(
   message: string,
-  model: string,
   history: Array<{ role: 'user' | 'assistant'; content: string }>,
   opts?: { protocol?: 'acp' | 'ucp'; store?: string }
-): Promise<{ reply: string; products: DemoProduct[]; model_used: string }> {
+): Promise<{ reply: string; products: DemoProduct[] }> {
   const res = await fetch('/api/agent-chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message, model, history, protocol: opts?.protocol, store: opts?.store }),
+    body: JSON.stringify({ message, history, protocol: opts?.protocol, store: opts?.store }),
     cache: 'no-store',
   });
 
