@@ -33,6 +33,66 @@ export interface DemoProductResult {
   shop_domain?: string;
 }
 
+interface PriceRange {
+  minCents?: number;
+  maxCents?: number;
+}
+
+function dollarsToCents(value: string): number {
+  const parsed = Number.parseFloat(value);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return 0;
+  }
+  return Math.round(parsed * 100);
+}
+
+function extractPriceRange(query: string): PriceRange | null {
+  const normalized = query.toLowerCase();
+
+  const betweenMatch = normalized.match(/between\s*\$?(\d+(?:\.\d+)?)\s*(?:and|to)\s*\$?(\d+(?:\.\d+)?)/i);
+  if (betweenMatch) {
+    const a = dollarsToCents(betweenMatch[1] || '0');
+    const b = dollarsToCents(betweenMatch[2] || '0');
+    return { minCents: Math.min(a, b), maxCents: Math.max(a, b) };
+  }
+
+  const underMatch = normalized.match(/(?:under|below|less than|max(?:imum)?|at most)\s*\$?(\d+(?:\.\d+)?)/i);
+  if (underMatch) {
+    return { maxCents: dollarsToCents(underMatch[1] || '0') };
+  }
+
+  const overMatch = normalized.match(/(?:over|above|more than|at least|min(?:imum)?)\s*\$?(\d+(?:\.\d+)?)/i);
+  if (overMatch) {
+    return { minCents: dollarsToCents(overMatch[1] || '0') };
+  }
+
+  return null;
+}
+
+function applyPriceFilter(products: DemoProductResult[], range: PriceRange | null): DemoProductResult[] {
+  if (!range) {
+    return products;
+  }
+
+  return products.filter((product) => {
+    if (typeof range.minCents === 'number' && product.price < range.minCents) {
+      return false;
+    }
+    if (typeof range.maxCents === 'number' && product.price > range.maxCents) {
+      return false;
+    }
+    return true;
+  });
+}
+
+function sanitizeSearchQuery(query: string): string {
+  return query
+    .replace(/between\s*\$?\d+(?:\.\d+)?\s*(?:and|to)\s*\$?\d+(?:\.\d+)?/gi, '')
+    .replace(/(?:under|below|less than|max(?:imum)?|at most|over|above|more than|at least|min(?:imum)?)\s*\$?\d+(?:\.\d+)?/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 async function getShopifyToken(clientId: string, clientSecret: string): Promise<string> {
   const response = await fetch(SHOPIFY_AUTH_URL, {
     method: 'POST',
@@ -139,8 +199,9 @@ export async function fetchShopifyProducts(query: string, limit: number): Promis
   }
 
   const token = await getShopifyToken(clientId, clientSecret);
+  const baseQuery = sanitizeSearchQuery(query) || query;
   const queries = query
-    ? [query]
+    ? [baseQuery]
     : ['t-shirt', 'graphic tee', 'white tshirt', 'black t-shirt', 'oversized tee'];
 
   const offersById = new Map<string, ShopifyOffer>();
@@ -160,8 +221,11 @@ export async function fetchShopifyProducts(query: string, limit: number): Promis
     }
   }
 
-  return Array.from(offersById.values())
+  const mapped = Array.from(offersById.values())
     .map((offer, index) => toDemoProduct(offer, index))
-    .filter((product) => Boolean(product.images[0]?.url))
-    .slice(0, limit);
+    .filter((product) => Boolean(product.images[0]?.url));
+
+  const filteredByPrice = applyPriceFilter(mapped, extractPriceRange(query));
+
+  return filteredByPrice.slice(0, limit);
 }

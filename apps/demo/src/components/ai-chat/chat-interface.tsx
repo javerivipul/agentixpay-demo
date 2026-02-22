@@ -128,7 +128,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
             <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
           </div>
-          <span className="font-mono text-xs text-accent-200">AI Agent — Agentic Commerce Protocol</span>
+          <span className="font-mono text-xs text-accent-200 truncate">AI Agent - Agentic Commerce Protocol</span>
         </div>
         <span className="text-xs bg-accent-700/50 text-accent-200 font-mono px-2 py-0.5 rounded-full">
           {isLoading ? 'Thinking...' : selectedModelLabel}
@@ -142,7 +142,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
             <MessageBubble sender={msg.sender} text={msg.text} typing={msg.typing}>
               {/* Product cards */}
               {msg.products && msg.products.length > 0 && (
-                <div className="grid grid-cols-2 gap-2.5 mt-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3">
                   {msg.products.map((p) => (
                     <ProductCard
                       key={p.id}
@@ -160,11 +160,11 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
 
       {/* Action Bar */}
       <div className="px-4 py-3 border-t border-warm-200 bg-warm-50">
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex flex-wrap items-center gap-2 mb-2">
           <select
             value={selectedModel}
             onChange={(e) => setSelectedModel(e.target.value)}
-            className="w-52 rounded-lg border border-warm-300 bg-white px-3 py-2 text-sm text-brand-700"
+            className="w-full sm:w-52 rounded-lg border border-warm-300 bg-white px-3 py-2 text-sm text-brand-700"
           >
             {LLM_MODELS.map((model) => (
               <option key={model.value} value={model.value}>
@@ -174,7 +174,7 @@ export function ChatInterface({ onJourneyEvent, onOrderComplete, onStatsUpdate, 
           </select>
           <button
             onClick={handleReset}
-            className="ml-auto flex items-center gap-2 px-3 py-2 bg-accent-100 text-accent-700 rounded-lg font-medium text-sm hover:bg-accent-200 transition-all"
+            className="sm:ml-auto flex items-center gap-2 px-3 py-2 bg-accent-100 text-accent-700 rounded-lg font-medium text-sm hover:bg-accent-200 transition-all"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset
