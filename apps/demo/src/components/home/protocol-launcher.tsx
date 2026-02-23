@@ -29,7 +29,7 @@ export function ProtocolLauncher({
 
   const acp = storesByProtocol.acp;
   const ucp = storesByProtocol.ucp;
-  const rows = Math.max(acp.length, ucp.length);
+  const stores = protocol === 'acp' ? acp : ucp;
 
   return (
     <div className="w-full max-w-3xl mx-auto mt-10 bg-white/70 backdrop-blur rounded-2xl border border-warm-200 shadow-lg overflow-hidden">
@@ -58,56 +58,35 @@ export function ProtocolLauncher({
           <table className="min-w-full text-sm border border-warm-200 rounded-xl overflow-hidden">
             <thead className="bg-warm-50">
               <tr>
-                <th className="text-left px-4 py-3 font-semibold text-brand-700">ACP Enabled Stores</th>
-                <th className="text-left px-4 py-3 font-semibold text-brand-700">UCP Enabled Stores</th>
+                <th className="text-left px-4 py-3 font-semibold text-brand-700">
+                  {protocol === 'acp' ? 'ACP Enabled Stores' : 'UCP Enabled Stores'}
+                </th>
+                <th className="text-left px-4 py-3 font-semibold text-brand-700">Launch</th>
               </tr>
             </thead>
             <tbody>
-              {rows === 0 ? (
+              {stores.length === 0 ? (
                 <tr>
                   <td className="px-4 py-4 text-brand-500" colSpan={2}>
-                    No stores configured. Set `ACP_ENABLED_STORES` and `UCP_ENABLED_STORES`.
+                    No stores configured for {protocol.toUpperCase()}. Set `{protocol === 'acp' ? 'ACP_ENABLED_STORES' : 'UCP_ENABLED_STORES'}`.
                   </td>
                 </tr>
               ) : (
-                Array.from({ length: rows }).map((_, i) => {
-                  const acpStore = acp[i];
-                  const ucpStore = ucp[i];
-                  return (
-                    <tr key={`row_${i}`} className="border-t border-warm-200 bg-white">
-                      <td className={`px-4 py-3 ${protocol === 'acp' ? 'bg-blue-50/60' : ''}`}>
-                        {acpStore ? (
-                          <div className="flex items-center justify-between gap-3">
-                            <span className="font-mono text-xs text-brand-700">{acpStore}</span>
-                            <Link
-                              href={`/demo?protocol=acp&store=${encodeURIComponent(acpStore)}`}
-                              className="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 whitespace-nowrap"
-                            >
-                              Open Demo
-                            </Link>
-                          </div>
-                        ) : (
-                          <span className="text-xs text-brand-400">-</span>
-                        )}
-                      </td>
-                      <td className={`px-4 py-3 ${protocol === 'ucp' ? 'bg-blue-50/60' : ''}`}>
-                        {ucpStore ? (
-                          <div className="flex items-center justify-between gap-3">
-                            <span className="font-mono text-xs text-brand-700">{ucpStore}</span>
-                            <Link
-                              href={`/demo?protocol=ucp&store=${encodeURIComponent(ucpStore)}`}
-                              className="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 whitespace-nowrap"
-                            >
-                              Open Demo
-                            </Link>
-                          </div>
-                        ) : (
-                          <span className="text-xs text-brand-400">-</span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })
+                stores.map((store) => (
+                  <tr key={`${protocol}:${store}`} className="border-t border-warm-200 bg-white">
+                    <td className="px-4 py-3">
+                      <span className="font-mono text-xs text-brand-700">{store}</span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <Link
+                        href={`/demo?protocol=${protocol}&store=${encodeURIComponent(store)}`}
+                        className="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 whitespace-nowrap"
+                      >
+                        Open Demo
+                      </Link>
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
           </table>
